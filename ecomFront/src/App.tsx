@@ -1,6 +1,7 @@
 
 import './App.css';
 import Header from './components/layout/headers';
+import Topbar from './components/layout/topbar';
 import { BrowserRouter as Router, Routes, Route } from 'react-router-dom';
 
 
@@ -13,7 +14,9 @@ const Contact = () => <div style={{padding: 24}}>Contact</div>;
 function App() {
   return (
     <Router>
+      <Topbar />
       <Header />
+      
       <Routes>
         <Route path="/" element={<Accueil />} />
         <Route path="/boutique" element={<Boutique />} />
