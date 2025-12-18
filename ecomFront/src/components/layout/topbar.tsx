@@ -14,18 +14,6 @@ const Topbar: React.FC = () => {
       <div className="whitespace-nowrap animate-marquee text-white font-semibold text-sm py-2 px-4">
         {promoText}
       </div>
-      {/* Animation CSS pour le texte défilant */}
-      <style>{`
-        @keyframes marquee {
-          0% { transform: translateX(100%); }
-          100% { transform: translateX(-100%); }
-        }
-        .animate-marquee {
-          display: inline-block;
-          min-width: 100%;
-          animation: marquee 25s linear infinite;
-        }
-      `}</style>
     </div>
   );
 };

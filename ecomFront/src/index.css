@@ -1,3 +1,4 @@
+
 @import "tailwindcss";
 
 :root {
@@ -13,6 +14,20 @@
   text-rendering: optimizeLegibility;
   -webkit-font-smoothing: antialiased;
   -moz-osx-font-smoothing: grayscale;
+}
+
+
+/* Animation pour le texte défilant de la topbar (marquee) */
+@keyframes marquee {
+  0% { transform: translateX(100%); }
+  100% { transform: translateX(-100%); }
+}
+
+/* Classe utilitaire pour le texte défilant */
+.animate-marquee {
+  display: inline-block;
+  min-width: 100%;
+  animation: marquee 25s linear infinite;
 }
 
 a {
