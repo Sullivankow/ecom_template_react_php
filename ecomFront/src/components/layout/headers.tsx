@@ -51,7 +51,7 @@ const Header: React.FC = () => {
         {/* Icônes à droite */}
         <div className="flex items-center gap-4 min-w-[90px] justify-end order-3 flex-shrink-0">
           {/* Recherche */}
-          <span title="Rechercher un produit" className="text-black cursor-pointer">
+          <span title="Rechercher un produit" className="text-black cursor-pointer transition-transform hover:scale-110 hover:text-gray-900">
             {/* Icône loupe moderne */}
             <svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 24 24" className="w-6 h-6" fill="none" stroke="currentColor" strokeWidth="1.7">
               <circle cx="11" cy="11" r="6" />
@@ -59,7 +59,7 @@ const Header: React.FC = () => {
             </svg>
           </span>
           {/* Panier */}
-          <span title="Panier" className="text-black cursor-pointer">
+          <span title="Panier" className="text-black cursor-pointer transition-transform hover:scale-110 hover:text-gray-900">
             {/* Icône panier moderne */}
             <svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 24 24" className="w-6 h-6" fill="none" stroke="currentColor" strokeWidth="1.7">
               <circle cx="9" cy="20" r="1.5" />
@@ -68,7 +68,7 @@ const Header: React.FC = () => {
             </svg>
           </span>
           {/* Connexion */}
-          <span title="Connexion" className="text-black cursor-pointer">
+          <span title="Connexion" className="text-black cursor-pointer transition-transform hover:scale-110 hover:text-gray-900">
             {/* Icône profil moderne */}
             <svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 24 24" className="w-6 h-6" fill="none" stroke="currentColor" strokeWidth="1.7">
               <circle cx="12" cy="8" r="4" stroke="currentColor" strokeWidth="1.7" />
