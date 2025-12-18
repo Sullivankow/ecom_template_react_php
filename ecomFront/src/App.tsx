@@ -1,16 +1,14 @@
 
-import './App.css'
+import './App.css';
+import Header from './components/layout/headers';
 
 function App() {
-
-
   return (
-    
-      <div className="text-red-500 ">
-
-        Bonjour</div>
-    
-  )
+    <>
+      <Header />
+      {/* ...autres composants ou routes ici... */}
+    </>
+  );
 }
 
-export default App
+export default App;
