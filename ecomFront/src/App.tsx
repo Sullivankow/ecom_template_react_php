@@ -5,7 +5,7 @@ import Topbar from './components/layout/topbar';
 import Hero from './components/layout/hero';
 import BestSellerSection from './components/layout/bestSellerSection';
 import AvantageSection from './components/layout/avantageSection';
-
+import Footer from './components/layout/footer';
 import { BrowserRouter as Router, Routes, Route } from 'react-router-dom';
 import CategorySection from './components/layout/categorySection';
 
@@ -25,6 +25,7 @@ function App() {
       <BestSellerSection />
       <CategorySection />
       <AvantageSection />
+      <Footer />
       
       <Routes>
         <Route path="/" element={<Accueil />} />
