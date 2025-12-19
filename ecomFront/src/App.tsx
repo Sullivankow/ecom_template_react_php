@@ -4,7 +4,9 @@ import Header from './components/layout/headers';
 import Topbar from './components/layout/topbar';
 import Hero from './components/layout/hero';
 import BestSellerSection from './components/layout/bestSellerSection';
+
 import { BrowserRouter as Router, Routes, Route } from 'react-router-dom';
+import CategorySection from './components/layout/categorySection';
 
 
 // Pages de base (à remplacer par tes vraies pages)
@@ -20,6 +22,7 @@ function App() {
       <Header />
       <Hero />
       <BestSellerSection />
+      <CategorySection />
       
       <Routes>
         <Route path="/" element={<Accueil />} />
