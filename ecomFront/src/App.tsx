@@ -3,6 +3,7 @@ import './App.css';
 import Header from './components/layout/headers';
 import Topbar from './components/layout/topbar';
 import Hero from './components/layout/hero';
+import BestSellerSection from './components/layout/bestSellerSection';
 import { BrowserRouter as Router, Routes, Route } from 'react-router-dom';
 
 
@@ -18,6 +19,7 @@ function App() {
       <Topbar />
       <Header />
       <Hero />
+      <BestSellerSection />
       
       <Routes>
         <Route path="/" element={<Accueil />} />
