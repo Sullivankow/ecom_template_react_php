@@ -15,3 +15,11 @@ export const registrationSchema = yup.object({
 
 // Exemple d'utilisation :
 // registrationSchema.validate({ email, password })
+
+
+
+//Création dd'un shéma de validation pour le forulaire de connexion
+export const loginSchema = yup.object({ 
+    email: yup.string().email('Email invalide').required('Email requis'),
+    password: yup.string().required('Mot de passe requis'),
+})
