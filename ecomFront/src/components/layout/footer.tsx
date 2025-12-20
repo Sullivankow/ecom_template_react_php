@@ -35,7 +35,9 @@ const Footer: React.FC = () => {
         </div>
       </div>
       <div style={{ textAlign: "center", marginTop: "2rem", fontSize: "0.9rem", color: "#bbb" }}>
-        &copy; {new Date().getFullYear()} EcomTemplate. Tous droits réservés.
+        &copy; {new Date().getFullYear()} EcomTemplate. Tous droits réservés.<br />
+        <a href="/mentions-legales" style={{ color: "#bbb", marginRight: "1rem", textDecoration: "underline" }}>Mentions légales</a>
+        <a href="/politique-confidentialite" style={{ color: "#bbb", textDecoration: "underline" }}>Politique de confidentialité</a>
       </div>
     </footer>
   );
