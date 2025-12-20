@@ -11,6 +11,7 @@ import PromotionSection from './components/layout/promotionSection';
 import Footer from './components/layout/footer';
 import Registration from './pages/account/registration';
 import Login from './pages/account/login';
+import NotFound from './pages/notFound';
 
 // Pages de base (à remplacer par tes vraies pages si besoin)
 const Boutique = () => <div style={{ padding: 24 }}>Boutique</div>;
@@ -53,6 +54,7 @@ function App() {
       <Route path="/contact" element={<Contact />} />
       <Route path="/login" element={<Login />} />
       <Route path="/registration" element={<Registration />} />
+      <Route path="*" element={<NotFound />} />
     </Routes>
   );
 }
