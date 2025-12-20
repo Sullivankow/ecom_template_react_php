@@ -30,7 +30,7 @@ const Login: React.FC = () => {
       }
       // Ici, tu continues la logique de connexion (API, etc.)
       alert("Connexion réussie !");
-      // Ici, tu continues la logique de connexion (API, etc.)
+      
     } catch (err: any) {
       setError(err.message); // Affiche le message d’erreur de yup
     }
