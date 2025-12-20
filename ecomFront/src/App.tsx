@@ -1,42 +1,59 @@
+import { useEffect } from 'react';
+import { Routes, Route } from 'react-router-dom';
 
-import './App.css';
-import Header from './components/layout/headers';
 import Topbar from './components/layout/topbar';
+import Header from './components/layout/headers';
 import Hero from './components/layout/hero';
 import BestSellerSection from './components/layout/bestSellerSection';
-import PromotionSection from './components/layout/promotionSection';
+import CategorySection from './components/layout/categorySection';
 import AvantageSection from './components/layout/avantageSection';
 import Footer from './components/layout/footer';
-import { BrowserRouter as Router, Routes, Route } from 'react-router-dom';
-import CategorySection from './components/layout/categorySection';
 
+import Login from './pages/account/login';
 
-// Pages de base (à remplacer par tes vraies pages)
-const Accueil = () => <div style={{padding: 24}}>Accueil</div>;
-const Boutique = () => <div style={{padding: 24}}>Boutique</div>;
-const Promotions = () => <div style={{padding: 24}}>Promotions</div>;
-const Contact = () => <div style={{padding: 24}}>Contact</div>;
+// Pages de base (à remplacer par tes vraies pages si besoin)
+const Boutique = () => <div style={{ padding: 24 }}>Boutique</div>;
+const Promotions = () => <div style={{ padding: 24 }}>Promotions</div>;
+const Contact = () => <div style={{ padding: 24 }}>Contact</div>;
+
+function Home() {
+  useEffect(() => {
+    document.title = 'EcomShop — Boutique';
+    const meta = document.querySelector('meta[name="description"]');
+    if (meta) meta.setAttribute('content', "EcomShop - Boutique en ligne : prêt-à-porter, accessoires et meilleures offres.");
+    const linkCanonical = document.querySelector('link[rel="canonical"]');
+    if (linkCanonical) linkCanonical.setAttribute('href', window.location.origin + '/');
+  }, []);
+
+  return (
+    <>
+      <Topbar />
+      <Header />
+
+      <main>
+        <Hero />
+        <BestSellerSection />
+        <CategorySection />
+        <AvantageSection />
+      </main>
+
+      <Footer />
+    </>
+  );
+}
 
 function App() {
   return (
-    <Router>
-      <Topbar />
-      <Header />
-      <Hero />
-      <BestSellerSection />
-      <CategorySection />
-      <PromotionSection />
-      <AvantageSection />
-      <Footer />
-      
-      <Routes>
-        <Route path="/" element={<Accueil />} />
-        <Route path="/boutique" element={<Boutique />} />
-        <Route path="/promotions" element={<Promotions />} />
-        <Route path="/contact" element={<Contact />} />
-      </Routes>
-    </Router>
+    <Routes>
+      <Route path="/" element={<Home />} />
+      <Route path="/boutique" element={<Boutique />} />
+      <Route path="/promotions" element={<Promotions />} />
+      <Route path="/contact" element={<Contact />} />
+      <Route path="/login" element={<Login />} />
+    </Routes>
   );
 }
 
 export default App;
+
+

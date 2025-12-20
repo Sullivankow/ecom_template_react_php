@@ -1,9 +1,10 @@
 import React, { useState } from "react";
+import { Link, useNavigate } from "react-router-dom";
 import logo from "../../assets/react.svg";
 
 // Menu de navigation principal
 const menuItems = [
-  { name: "Accueil", href: "#" },
+  { name: "Accueil", href: "/home" },
   { name: "Boutique", href: "#" },
   { name: "Promotions", href: "#" },
   { name: "Contact", href: "#" },
@@ -11,6 +12,7 @@ const menuItems = [
 
 const Header: React.FC = () => {
   const [menuOpen, setMenuOpen] = useState(false);
+  const navigate = useNavigate();
   return (
     <header className="w-full bg-white shadow-md sticky top-0 z-50">
       <div className="max-w-7xl mx-auto flex items-center justify-between px-4 py-2 md:py-3">
@@ -68,13 +70,22 @@ const Header: React.FC = () => {
             </svg>
           </span>
           {/* Connexion */}
-          <span title="Connexion" className="text-black cursor-pointer transition-transform hover:scale-110 hover:text-gray-900">
+          <Link
+            to="/login"
+            title="Connexion"
+            className="text-black cursor-pointer transition-transform hover:scale-110 hover:text-gray-900"
+            onClick={(e) => {
+              console.log('Header: login clicked');
+              e.preventDefault();
+              navigate('/login');
+            }}
+          >
             {/* Icône profil moderne */}
             <svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 24 24" className="w-6 h-6" fill="none" stroke="currentColor" strokeWidth="1.7">
               <circle cx="12" cy="8" r="4" stroke="currentColor" strokeWidth="1.7" />
               <path d="M4.5 19c0-2.485 3.357-4.5 7.5-4.5s7.5 2.015 7.5 4.5" stroke="currentColor" strokeWidth="1.7" strokeLinecap="round" />
             </svg>
-          </span>
+          </Link>
         </div>
       </div>
 
