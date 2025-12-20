@@ -7,6 +7,7 @@ import Hero from './components/layout/hero';
 import BestSellerSection from './components/layout/bestSellerSection';
 import CategorySection from './components/layout/categorySection';
 import AvantageSection from './components/layout/avantageSection';
+import PromotionSection from './components/layout/promotionSection';
 import Footer from './components/layout/footer';
 
 import Login from './pages/account/login';
@@ -34,6 +35,7 @@ function Home() {
         <Hero />
         <BestSellerSection />
         <CategorySection />
+        <PromotionSection />
         <AvantageSection />
       </main>
 
