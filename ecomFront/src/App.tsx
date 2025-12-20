@@ -9,7 +9,7 @@ import CategorySection from './components/layout/categorySection';
 import AvantageSection from './components/layout/avantageSection';
 import PromotionSection from './components/layout/promotionSection';
 import Footer from './components/layout/footer';
-
+import Registration from './pages/account/registration';
 import Login from './pages/account/login';
 
 // Pages de base (à remplacer par tes vraies pages si besoin)
@@ -52,6 +52,7 @@ function App() {
       <Route path="/promotions" element={<Promotions />} />
       <Route path="/contact" element={<Contact />} />
       <Route path="/login" element={<Login />} />
+      <Route path="/registration" element={<Registration />} />
     </Routes>
   );
 }

@@ -6,7 +6,7 @@
  * - Fond blanc, texte noir, accents bleus (charte graphique)
  * - Flèche retour en haut à gauche
  * - Formulaire email/mot de passe, boutons sociaux
- * - Commentaires en français
+ * 
  */
 import React from "react";
 import { Link } from "react-router-dom";
@@ -94,7 +94,7 @@ const Login: React.FC = () => {
 						</div>
 					</div>
 				</div>
-				<p className="mt-6 text-center text-sm text-gray-500">Pas encore membre ? <a href="/" className="text-blue-600 hover:text-blue-500">Inscrivez-vous ici</a></p>
+				<p className="mt-6 text-center text-sm text-gray-500">Pas encore membre ? <a href="/registration" className="text-blue-600 hover:text-blue-500">Inscrivez-vous ici</a></p>
 			</div>
 		</div>
 	);

@@ -75,7 +75,6 @@ const Header: React.FC = () => {
             title="Connexion"
             className="text-black cursor-pointer transition-transform hover:scale-110 hover:text-gray-900"
             onClick={(e) => {
-              console.log('Header: login clicked');
               e.preventDefault();
               navigate('/login');
             }}
