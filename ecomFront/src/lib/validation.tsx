@@ -23,3 +23,29 @@ export const loginSchema = yup.object({
     email: yup.string().email('Email invalide').required('Email requis'),
     password: yup.string().required('Mot de passe requis'),
 })
+
+
+// Schéma de validation pour le formulaire d'inscription
+export const registrationFullSchema = yup.object({
+  fullname: yup
+    .string()
+    .min(2, 'Le nom doit comporter au moins 2 caractères')
+    .max(50, 'Le nom est trop long')
+    .required('Nom complet requis'),
+  email: yup
+    .string()
+    .email('Email invalide')
+    .required('Email requis'),
+  password: yup
+    .string()
+    .min(8, 'Au moins 8 caractères')
+    .matches(/[A-Z]/, 'Une majuscule requise')
+    .matches(/[a-z]/, 'Une minuscule requise')
+    .matches(/\d/, 'Un chiffre requis')
+    .required('Mot de passe requis'),
+  confirmPassword: yup
+    .string()
+    .oneOf([yup.ref('password')], 'Les mots de passe ne correspondent pas')
+    .required('Confirmation du mot de passe requise'),
+});
+

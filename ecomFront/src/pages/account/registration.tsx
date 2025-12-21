@@ -8,10 +8,31 @@
  * - Formulaire nom, email, mot de passe, confirmation
  * - Boutons sociaux
  */
-import React from "react";
+import React, { useState } from "react";
+import { registrationFullSchema } from '../../lib/validation';
 import { Link } from "react-router-dom";
 
 const Registration: React.FC = () => {
+  // États pour les champs et l'erreur
+  const [fullname, setFullname] = useState("");
+  const [email, setEmail] = useState("");
+  const [password, setPassword] = useState("");
+  const [confirmPassword, setConfirmPassword] = useState("");
+  const [error, setError] = useState("");
+
+  // Soumission du formulaire avec validation yup
+  const handleSubmit = async (e: React.FormEvent) => {
+    e.preventDefault();
+    setError("");
+    try {
+      await registrationFullSchema.validate({ fullname, email, password, confirmPassword });
+      // Ici, tu continues la logique d'inscription (API, etc.)
+      alert("Inscription réussie !");
+    } catch (err: any) {
+      setError(err.message);
+    }
+  };
+
   return (
     <div className="min-h-screen flex items-center justify-center bg-white text-gray-900 px-4 relative">
       {/* Flèche retour à la page de connexion */}
@@ -29,7 +50,7 @@ const Registration: React.FC = () => {
 
         {/* Bloc formulaire d'inscription */}
         <div className="bg-white border border-gray-200 rounded-xl p-6 shadow-lg">
-          <form className="space-y-4" onSubmit={e => e.preventDefault()}>
+          <form className="space-y-4" onSubmit={handleSubmit}>
             {/* Champ nom complet */}
             <div>
               <label htmlFor="fullname" className="block text-sm font-medium text-gray-700 mb-2">Nom complet</label>
@@ -37,6 +58,8 @@ const Registration: React.FC = () => {
                 id="fullname"
                 name="fullname"
                 type="text"
+                value={fullname}
+                onChange={e => setFullname(e.target.value)}
                 required
                 className="block w-full px-4 py-3 rounded-md bg-gray-100 border border-gray-300 text-gray-900 placeholder-gray-400 focus:outline-none focus:ring-2 focus:ring-blue-500"
                 placeholder="Votre nom complet"
@@ -49,6 +72,8 @@ const Registration: React.FC = () => {
                 id="email"
                 name="email"
                 type="email"
+                value={email}
+                onChange={e => setEmail(e.target.value)}
                 required
                 className="block w-full px-4 py-3 rounded-md bg-gray-100 border border-gray-300 text-gray-900 placeholder-gray-400 focus:outline-none focus:ring-2 focus:ring-blue-500"
                 placeholder="votre@email.com"
@@ -61,6 +86,8 @@ const Registration: React.FC = () => {
                 id="password"
                 name="password"
                 type="password"
+                value={password}
+                onChange={e => setPassword(e.target.value)}
                 required
                 className="block w-full px-4 py-3 rounded-md bg-gray-100 border border-gray-300 text-gray-900 placeholder-gray-400 focus:outline-none focus:ring-2 focus:ring-blue-500"
                 placeholder="••••••••"
@@ -73,11 +100,15 @@ const Registration: React.FC = () => {
                 id="confirmPassword"
                 name="confirmPassword"
                 type="password"
+                value={confirmPassword}
+                onChange={e => setConfirmPassword(e.target.value)}
                 required
                 className="block w-full px-4 py-3 rounded-md bg-gray-100 border border-gray-300 text-gray-900 placeholder-gray-400 focus:outline-none focus:ring-2 focus:ring-blue-500"
                 placeholder="••••••••"
               />
             </div>
+            {/* Affichage du message d'erreur de validation */}
+            {error && <div className="text-red-500 text-sm">{error}</div>}
             {/* Bouton s'inscrire */}
             <button
               type="submit"
