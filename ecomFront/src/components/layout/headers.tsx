@@ -2,11 +2,12 @@ import React, { useState } from "react";
 import { Link, useNavigate } from "react-router-dom";
 import logo from "../../assets/react.svg";
 
+
 // Menu de navigation principal
 const menuItems = [
   { name: "Accueil", href: "/" },
   { name: "Catalogue", href: "/catalog" },
-  { name: "Promotions", href: "#" },
+  { name: "Promotions", href: "/product-promo" },
   { name: "Contact", href: "#" },
 ];
 
@@ -123,7 +124,9 @@ const Header: React.FC = () => {
           </ul>
         </div>
       </div>
+      
     </header>
+    
   );
 };
 
