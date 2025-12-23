@@ -14,6 +14,7 @@ import Login from './pages/account/login';
 import NotFound from './pages/notFound';
 import Catalog from './pages/catalog/catalog';
 import ProductPromo from './pages/catalog/productPromo';
+import ContactForm from './components/forms/contactForm';
 
 // Pages de base (à remplacer par tes vraies pages si besoin)
 const Boutique = () => <div style={{ padding: 24 }}>Boutique</div>;
@@ -53,11 +54,11 @@ function App() {
       <Route path="/" element={<Home />} />
       <Route path="/boutique" element={<Boutique />} />
       <Route path="/promotions" element={<Promotions />} />
-      <Route path="/contact" element={<Contact />} />
       <Route path="/login" element={<Login />} />
       <Route path="/registration" element={<Registration />} />
       <Route path="/catalog" element={<Catalog />} />
       <Route path="/product-promo" element={<ProductPromo />} />
+      <Route path="/contact" element={<ContactForm />} />
       <Route path="*" element={<NotFound />} />
     </Routes>
   );

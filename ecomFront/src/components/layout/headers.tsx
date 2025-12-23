@@ -8,7 +8,7 @@ const menuItems = [
   { name: "Accueil", href: "/" },
   { name: "Catalogue", href: "/catalog" },
   { name: "Promotions", href: "/product-promo" },
-  { name: "Contact", href: "#" },
+  { name: "Contact", href: "/contact" },
 ];
 
 const Header: React.FC = () => {
