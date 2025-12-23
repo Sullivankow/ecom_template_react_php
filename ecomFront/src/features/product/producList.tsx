@@ -7,6 +7,8 @@ interface Product {
   price: number;
   image: string;
   description: string;
+  promoPrice?: number;
+  isPromo?: boolean;
 }
 
 // Composant pour afficher la liste des produits filtrés
@@ -20,6 +22,8 @@ const ProductList = ({ products }: { products: Product[] }) => (
         title={product.name}
         price={product.price}
         description={product.description}
+        promoPrice={product.promoPrice}
+        isPromo={product.isPromo}
       />
     ))}
   </div>

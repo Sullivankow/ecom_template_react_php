@@ -4,7 +4,7 @@ import logo from "../../assets/react.svg";
 
 // Menu de navigation principal
 const menuItems = [
-  { name: "Accueil", href: "/home" },
+  { name: "Accueil", href: "/" },
   { name: "Catalogue", href: "/catalog" },
   { name: "Promotions", href: "#" },
   { name: "Contact", href: "#" },
