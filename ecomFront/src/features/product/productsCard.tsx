@@ -1,5 +1,3 @@
-
-
 import Button from "../../components/ui/button";
 
 // Définition des props attendues pour la fiche produit
@@ -38,5 +36,7 @@ const ProductCard = ({ image, title, price, description }: ProductCardProps) => 
 };
 
 export default ProductCard;
+
+
 
 

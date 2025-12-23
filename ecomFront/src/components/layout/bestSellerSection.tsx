@@ -1,5 +1,5 @@
 import Button from "../../components/ui/button";
-import ProductCard from "../../features/product/productCard";
+import ProductCard from "../../features/product/productsCard";
 
 // Tableau de produits best sellers (données en dur)
 const products = [
