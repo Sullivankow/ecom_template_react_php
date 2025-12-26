@@ -6,6 +6,8 @@ import Header from '../../components/layout/headers';
 import Footer from '../../components/layout/footer';
 // Importation du hook personnalisé pour la gestion du panier
 import { useCart } from '../../hooks/useCart';
+// Importation du bouton corbeille
+import { ButtonDeleted } from '../../components/ui/button';
 
 // Composant principal de la page panier
 const CartPage: React.FC = () => {
@@ -30,10 +32,10 @@ const CartPage: React.FC = () => {
             <table style={{ width: '100%', borderCollapse: 'collapse', marginBottom: 24 }}>
               <thead>
                 <tr>
-                  <th>Produit</th>
-                  <th>Prix</th>
-                  <th>Quantité</th>
-                  <th>Sous-total</th>
+                  <th style={{ color: 'black' }}>Produit</th>
+                  <th style={{ color: 'black' }}>Prix</th>
+                  <th style={{ color: 'black' }}>Quantité</th>
+                  <th style={{ color: 'black' }}>Sous-total</th>
                   <th></th>
                 </tr>
               </thead>
@@ -41,7 +43,7 @@ const CartPage: React.FC = () => {
                 {/* Boucle sur chaque article du panier */}
                 {cart.map(item => (
                   <tr key={item.id} style={{ borderBottom: '1px solid #eee' }}>
-                    <td>
+                    <td style={{ color: 'black' }}>
                       {/* Affichage de l'image du produit si disponible */}
                       {item.image && (
                         <img src={item.image} alt={item.name} style={{ width: 50, marginRight: 8 }} />
@@ -49,24 +51,22 @@ const CartPage: React.FC = () => {
                       {item.name}
                     </td>
                     {/* Prix unitaire */}
-                    <td>{item.price.toFixed(2)} €</td>
+                    <td style={{ color: 'black' }}>{item.price.toFixed(2)} €</td>
                     {/* Quantité modifiable */}
-                    <td>
+                    <td style={{ color: 'black' }}>
                       <input
                         type="number"
                         min={1}
                         value={item.quantity}
                         onChange={e => updateQuantity(item.id, Number(e.target.value))}
-                        style={{ width: 60 }}
+                        style={{ width: 60, color: 'black' }}
                       />
                     </td>
                     {/* Sous-total pour cet article */}
-                    <td>{(item.price * item.quantity).toFixed(2)} €</td>
-                    {/* Bouton de suppression */}
+                    <td style={{ color: 'black' }}>{(item.price * item.quantity).toFixed(2)} €</td>
+                    {/* Bouton de suppression (corbeille rouge) */}
                     <td>
-                      <button onClick={() => removeFromCart(item.id)} style={{ color: 'red' }}>
-                        Supprimer
-                      </button>
+                      <ButtonDeleted onClick={() => removeFromCart(item.id)} />
                     </td>
                   </tr>
                 ))}

@@ -1,6 +1,8 @@
 
+
 import Button from "../../components/ui/button";
 import { Link } from "react-router-dom";
+import { useCart } from '../../hooks/useCart';
 
 
 // Définition des props attendues pour la fiche produit
@@ -16,6 +18,20 @@ interface ProductCardProps {
 
 // Composant réutilisable pour une fiche produit e-commerce
 const ProductCard = ({ id, image, title, price, description, promoPrice, isPromo }: ProductCardProps) => {
+  // Hook panier pour ajouter un produit
+  const { addToCart } = useCart();
+
+  // Fonction pour ajouter ce produit au panier
+  const handleAddToCart = (e: React.MouseEvent) => {
+    e.preventDefault();
+    addToCart({
+      id: id.toString(),
+      name: title,
+      price: isPromo && promoPrice !== undefined && promoPrice < price ? promoPrice : price,
+      image: image
+    }, 1);
+  };
+
   return (
     <Link to={`/product/${id}`} className="block group focus:outline-none">
       <div className="bg-white rounded-2xl shadow-lg overflow-hidden flex flex-col w-full max-w-xs mx-auto sm:max-w-sm transition hover:scale-[1.02] hover:shadow-xl">
@@ -44,7 +60,12 @@ const ProductCard = ({ id, image, title, price, description, promoPrice, isPromo
               <span className="text-black font-semibold">{price.toFixed(2)} €</span>
             )}
             {/* Bouton avec icône + pour ajouter au panier */}
-            <Button className="px-2 py-1 text-lg rounded-full flex items-center justify-center" aria-label="Ajouter au panier" onClick={e => { e.preventDefault(); /* Ajout panier ici */ }}>
+            {/* Bouton + pour ajouter au panier */}
+            <Button
+              className="px-2 py-1 text-lg rounded-full flex items-center justify-center"
+              aria-label="Ajouter au panier"
+              onClick={handleAddToCart}
+            >
               {/* Icône plus (SVG) */}
               <svg xmlns="http://www.w3.org/2000/svg" fill="none" viewBox="0 0 24 24" stroke="currentColor" className="w-5 h-5">
                 <path strokeLinecap="round" strokeLinejoin="round" strokeWidth={2} d="M12 4v16m8-8H4" />
