@@ -11,12 +11,12 @@ import PromotionSection from './components/layout/promotionSection';
 import Footer from './components/layout/footer';
 import Registration from './pages/account/registration';
 import Login from './pages/account/login';
-
 import NotFound from './pages/notFound';
 import Catalog from './pages/catalog/catalog';
 import ProductPromo from './pages/catalog/productPromo';
 import ContactForm from './components/forms/contactForm';
 import ProductPage from './pages/product/productPage';
+import SearchResult from './pages/search/searchResult';
 
 // Pages de base (à remplacer par tes vraies pages si besoin)
 const Boutique = () => <div style={{ padding: 24 }}>Boutique</div>;
@@ -61,6 +61,7 @@ function App() {
       <Route path="/product-promo" element={<ProductPromo />} />
       <Route path="/contact" element={<ContactForm />} />
       <Route path="/product/:id" element={<ProductPage />} />
+      <Route path="/search" element={<SearchResult />} />
       <Route path="*" element={<NotFound />} />
     </Routes>
   );
