@@ -13,6 +13,8 @@ const menuItems = [
 
 const Header: React.FC = () => {
   const [menuOpen, setMenuOpen] = useState(false);
+  const [search, setSearch] = useState("");
+  const [showMobileSearch, setShowMobileSearch] = useState(false);
   const navigate = useNavigate();
   return (
     <header className="w-full bg-white shadow-md sticky top-0 z-50">
@@ -51,11 +53,88 @@ const Header: React.FC = () => {
           </ul>
         </nav>
 
-        {/* Icônes à droite */}
+        {/* Icônes à droite + barre de recherche */}
         <div className="flex items-center gap-4 min-w-[90px] justify-end order-3 flex-shrink-0">
-          {/* Recherche */}
-          <span title="Rechercher un produit" className="text-black cursor-pointer transition-transform hover:scale-110 hover:text-gray-900">
-            {/* Icône loupe moderne */}
+          {/* Barre de recherche desktop */}
+          <div
+            className="hidden md:flex items-center bg-gray-100 rounded-lg px-2 py-1 mr-2 border border-gray-200 focus-within:ring-2 focus-within:ring-blue-600"
+            style={{ minWidth: 180 }}
+          >
+            <input
+              type="text"
+              value={search}
+              onChange={e => setSearch(e.target.value)}
+              placeholder="Rechercher..."
+              className="bg-transparent outline-none px-2 py-1 text-black w-32 md:w-40"
+              aria-label="Rechercher un produit"
+              onKeyDown={e => {
+                if (e.key === 'Enter' && search.trim()) {
+                  navigate(`/search?query=${encodeURIComponent(search.trim())}`);
+                  setSearch("");
+                }
+              }}
+            />
+            <span
+              title="Rechercher"
+              className="text-black hover:text-blue-700 cursor-pointer ml-1"
+              onClick={() => {
+                if (search.trim()) {
+                  navigate(`/search?query=${encodeURIComponent(search.trim())}`);
+                  setSearch("");
+                }
+              }}
+            >
+              <svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 24 24" className="w-5 h-5" fill="none" stroke="currentColor" strokeWidth="1.7">
+                <circle cx="11" cy="11" r="6" />
+                <line x1="17" y1="17" x2="21" y2="21" stroke="currentColor" strokeWidth="1.7" strokeLinecap="round" />
+              </svg>
+            </span>
+          </div>
+          {/* Barre de recherche mobile */}
+          {showMobileSearch && (
+            <div className="fixed inset-0 z-50 flex items-start justify-center bg-black/40 md:hidden" onClick={() => setShowMobileSearch(false)}>
+              <div className="bg-white rounded-xl shadow-lg mt-24 mx-4 w-full max-w-md flex items-center px-3 py-2 border border-gray-200" onClick={e => e.stopPropagation()}>
+                <input
+                  type="text"
+                  value={search}
+                  onChange={e => setSearch(e.target.value)}
+                  placeholder="Rechercher..."
+                  className="bg-transparent outline-none px-2 py-1 text-black w-full"
+                  aria-label="Rechercher un produit"
+                  autoFocus
+                  onKeyDown={e => {
+                    if (e.key === 'Enter' && search.trim()) {
+                      navigate(`/search?query=${encodeURIComponent(search.trim())}`);
+                      setSearch("");
+                      setShowMobileSearch(false);
+                    }
+                  }}
+                />
+                <span
+                  title="Rechercher"
+                  className="text-black hover:text-blue-700 cursor-pointer ml-1"
+                  onClick={() => {
+                    if (search.trim()) {
+                      navigate(`/search?query=${encodeURIComponent(search.trim())}`);
+                      setSearch("");
+                      setShowMobileSearch(false);
+                    }
+                  }}
+                >
+                  <svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 24 24" className="w-5 h-5" fill="none" stroke="currentColor" strokeWidth="1.7">
+                    <circle cx="11" cy="11" r="6" />
+                    <line x1="17" y1="17" x2="21" y2="21" stroke="currentColor" strokeWidth="1.7" strokeLinecap="round" />
+                  </svg>
+                </span>
+              </div>
+            </div>
+          )}
+          {/* Recherche mobile (loupe seule) */}
+          <span
+            title="Rechercher un produit"
+            className="text-black cursor-pointer transition-transform hover:scale-110 hover:text-gray-900 md:hidden"
+            onClick={() => setShowMobileSearch(true)}
+          >
             <svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 24 24" className="w-6 h-6" fill="none" stroke="currentColor" strokeWidth="1.7">
               <circle cx="11" cy="11" r="6" />
               <line x1="17" y1="17" x2="21" y2="21" stroke="currentColor" strokeWidth="1.7" strokeLinecap="round" />
