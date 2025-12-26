@@ -141,7 +141,11 @@ const Header: React.FC = () => {
             </svg>
           </span>
           {/* Panier */}
-          <span title="Panier" className="text-black cursor-pointer transition-transform hover:scale-110 hover:text-gray-900">
+          <span
+            title="Panier"
+            className="text-black cursor-pointer transition-transform hover:scale-110 hover:text-gray-900"
+            onClick={() => navigate('/cartPage')}
+          >
             {/* Icône panier moderne */}
             <svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 24 24" className="w-6 h-6" fill="none" stroke="currentColor" strokeWidth="1.7">
               <circle cx="9" cy="20" r="1.5" />

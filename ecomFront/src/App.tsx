@@ -17,6 +17,7 @@ import ProductPromo from './pages/catalog/productPromo';
 import ContactForm from './components/forms/contactForm';
 import ProductPage from './pages/product/productPage';
 import SearchResult from './pages/search/searchResult';
+import CartPage from './pages/cart/cartPage';
 
 // Pages de base (à remplacer par tes vraies pages si besoin)
 const Boutique = () => <div style={{ padding: 24 }}>Boutique</div>;
@@ -62,6 +63,7 @@ function App() {
       <Route path="/contact" element={<ContactForm />} />
       <Route path="/product/:id" element={<ProductPage />} />
       <Route path="/search" element={<SearchResult />} />
+      <Route path="/cartPage" element={<CartPage />} />
       <Route path="*" element={<NotFound />} />
     </Routes>
   );
