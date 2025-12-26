@@ -18,6 +18,7 @@ import ContactForm from './components/forms/contactForm';
 import ProductPage from './pages/product/productPage';
 import SearchResult from './pages/search/searchResult';
 import CartPage from './pages/cart/cartPage';
+import CategoriesPage from './pages/category/categories';
 
 // Pages de base (à remplacer par tes vraies pages si besoin)
 const Boutique = () => <div style={{ padding: 24 }}>Boutique</div>;
@@ -64,6 +65,7 @@ function App() {
       <Route path="/product/:id" element={<ProductPage />} />
       <Route path="/search" element={<SearchResult />} />
       <Route path="/cartPage" element={<CartPage />} />
+      <Route path="/categories" element={<CategoriesPage />} />
       <Route path="*" element={<NotFound />} />
     </Routes>
   );

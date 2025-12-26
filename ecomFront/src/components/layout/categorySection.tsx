@@ -54,7 +54,7 @@ export default function CategorySection() {
       <div className="flex justify-center mt-8">
         <button
           className="px-6 py-2 rounded-lg bg-primary-600 text-white font-semibold shadow hover:bg-primary-700 transition-colors duration-200 text-base"
-          onClick={() => window.location.href = '#'}
+          onClick={() => window.location.href = '/categories'}
         >
           Voir tout
         </button>
