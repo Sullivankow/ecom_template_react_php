@@ -49,3 +49,26 @@ export const registrationFullSchema = yup.object({
     .required('Confirmation du mot de passe requise'),
 });
 
+
+
+// Schéma de validation pour le formulaire de contact (sécurisé contre les injections de script)
+export const contactSchema = yup.object({
+  name: yup
+    .string()
+    .min(2, 'Le nom doit comporter au moins 2 caractères')
+    .max(50, 'Le nom est trop long')
+    .matches(/^[a-zA-ZÀ-ÿ' -]+$/, 'Le nom ne doit contenir que des lettres et espaces')
+    .test('no-script', 'Caractères non autorisés détectés', value => !/<script|<|>|&|"|'|\//i.test(value || ''))
+    .required('Nom requis'),
+  email: yup
+    .string()
+    .email('Email invalide')
+    .required('Email requis'),
+  message: yup
+    .string()
+    .min(10, 'Le message doit comporter au moins 10 caractères')
+    .max(1000, 'Le message est trop long')
+    .test('no-script', 'Caractères non autorisés détectés', value => !/<script|<|>|&|"|'|\//i.test(value || ''))
+    .required('Message requis'),
+  
+});

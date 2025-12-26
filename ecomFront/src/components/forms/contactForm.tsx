@@ -1,4 +1,5 @@
 import React, { useState } from "react";
+import { contactSchema } from '../../lib/validation';
 import Topbar from "../layout/topbar";
 import Header from "../layout/headers";
 import Footer from "../layout/footer";
@@ -21,19 +22,24 @@ const ContactForm: React.FC = () => {
 	const handleSubmit = (e: React.FormEvent) => {
 		e.preventDefault();
 		setError("");
-		// Validation simple (à remplacer par une vraie validation si besoin)
-		if (!name || !email || !message) {
-			setError("Tous les champs sont requis.");
-			return;
-		}
-		// Simule l'envoi
-		setSent(true);
-		setTimeout(() => {
-			setSent(false);
-			setName("");
-			setEmail("");
-			setMessage("");
-		}, 2500);
+		// Validation avancée avec contactSchema
+		contactSchema.validate({ name, email, message }, { abortEarly: false })
+			.then(() => {
+				setSent(true);
+				setTimeout(() => {
+					setSent(false);
+					setName("");
+					setEmail("");
+					setMessage("");
+				}, 2500);
+			})
+			.catch((err) => {
+				if (err.inner && err.inner.length > 0) {
+					setError(err.inner.map((e: any) => e.message).join(' | '));
+				} else {
+					setError(err.message);
+				}
+			});
 	};
 
 	return (
