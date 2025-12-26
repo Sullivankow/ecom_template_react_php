@@ -1,4 +1,6 @@
 import React, { useState } from "react";
+// Import du hook panier pour afficher le nombre d'articles
+import { useCart } from '../../hooks/useCart';
 import { Link, useNavigate } from "react-router-dom";
 import logo from "../../assets/react.svg";
 
@@ -16,6 +18,10 @@ const Header: React.FC = () => {
   const [search, setSearch] = useState("");
   const [showMobileSearch, setShowMobileSearch] = useState(false);
   const navigate = useNavigate();
+  // Récupération du panier pour afficher la pastille
+  const { cart } = useCart();
+  // Calcul du nombre total d'articles dans le panier
+  const cartCount = cart.reduce((sum, item) => sum + item.quantity, 0);
   return (
     <header className="w-full bg-white shadow-md sticky top-0 z-50">
       <div className="max-w-7xl mx-auto flex items-center justify-between px-4 py-2 md:py-3">
@@ -140,10 +146,10 @@ const Header: React.FC = () => {
               <line x1="17" y1="17" x2="21" y2="21" stroke="currentColor" strokeWidth="1.7" strokeLinecap="round" />
             </svg>
           </span>
-          {/* Panier */}
+          {/* Panier avec pastille rouge si articles */}
           <span
             title="Panier"
-            className="text-black cursor-pointer transition-transform hover:scale-110 hover:text-gray-900"
+            className="relative text-black cursor-pointer transition-transform hover:scale-110 hover:text-gray-900"
             onClick={() => navigate('/cartPage')}
           >
             {/* Icône panier moderne */}
@@ -152,6 +158,32 @@ const Header: React.FC = () => {
               <circle cx="17" cy="20" r="1.5" />
               <path d="M3 4h2l2.68 12.39A2 2 0 0 0 9.61 18h4.78a2 2 0 0 0 1.93-1.61L19 6H6" stroke="currentColor" strokeWidth="1.7" strokeLinejoin="round" strokeLinecap="round" />
             </svg>
+            {/* Pastille rouge avec le nombre d'articles si > 0 */}
+            {cartCount > 0 && (
+              <span
+                style={{
+                  position: 'absolute',
+                  top: -6,
+                  right: -6,
+                  background: '#e3342f',
+                  color: 'white',
+                  borderRadius: '9999px',
+                  fontSize: 12,
+                  minWidth: 20,
+                  height: 20,
+                  display: 'flex',
+                  alignItems: 'center',
+                  justifyContent: 'center',
+                  padding: '0 6px',
+                  fontWeight: 700,
+                  boxShadow: '0 0 0 2px #fff',
+                  zIndex: 10,
+                }}
+                // Commentaire : pastille rouge affichant le nombre d'articles dans le panier
+              >
+                {cartCount}
+              </span>
+            )}
           </span>
           {/* Connexion */}
           <Link

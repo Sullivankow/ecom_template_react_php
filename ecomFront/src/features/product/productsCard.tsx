@@ -3,6 +3,7 @@
 import Button from "../../components/ui/button";
 import { Link } from "react-router-dom";
 import { useCart } from '../../hooks/useCart';
+import { useState } from 'react';
 
 
 // Définition des props attendues pour la fiche produit
@@ -20,8 +21,10 @@ interface ProductCardProps {
 const ProductCard = ({ id, image, title, price, description, promoPrice, isPromo }: ProductCardProps) => {
   // Hook panier pour ajouter un produit
   const { addToCart } = useCart();
+  // État pour afficher le toast de confirmation
+  const [showToast, setShowToast] = useState(false);
 
-  // Fonction pour ajouter ce produit au panier
+  // Fonction pour ajouter ce produit au panier et afficher le toast
   const handleAddToCart = (e: React.MouseEvent) => {
     e.preventDefault();
     addToCart({
@@ -30,11 +33,37 @@ const ProductCard = ({ id, image, title, price, description, promoPrice, isPromo
       price: isPromo && promoPrice !== undefined && promoPrice < price ? promoPrice : price,
       image: image
     }, 1);
+    // Affiche le toast
+    setShowToast(true);
+    // Cache le toast après 2 secondes
+    setTimeout(() => setShowToast(false), 2000);
   };
 
   return (
-    <Link to={`/product/${id}`} className="block group focus:outline-none">
-      <div className="bg-white rounded-2xl shadow-lg overflow-hidden flex flex-col w-full max-w-xs mx-auto sm:max-w-sm transition hover:scale-[1.02] hover:shadow-xl">
+    <>
+      {/* Toast de confirmation d'ajout au panier */}
+      {showToast && (
+        <div
+          style={{
+            position: 'fixed',
+            top: 24,
+            left: '50%',
+            transform: 'translateX(-50%)',
+            background: '#38c172',
+            color: 'white',
+            padding: '12px 32px',
+            borderRadius: 8,
+            fontWeight: 600,
+            fontSize: 16,
+            zIndex: 9999,
+            boxShadow: '0 2px 8px rgba(0,0,0,0.12)'
+          }}
+        >
+          Produit ajouté au panier !
+        </div>
+      )}
+      <Link to={`/product/${id}`} className="block group focus:outline-none">
+        <div className="bg-white rounded-2xl shadow-lg overflow-hidden flex flex-col w-full max-w-xs mx-auto sm:max-w-sm transition hover:scale-[1.02] hover:shadow-xl">
         <img
           src={image}
           alt={title}
@@ -74,7 +103,8 @@ const ProductCard = ({ id, image, title, price, description, promoPrice, isPromo
           </div>
         </div>
       </div>
-    </Link>
+      </Link>
+    </>
   );
 };
 
