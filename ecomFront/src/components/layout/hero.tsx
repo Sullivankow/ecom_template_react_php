@@ -1,10 +1,13 @@
+
 import Button from "../ui/button";
+import { useNavigate } from "react-router-dom";
 
 
 
 const imageUrl = "https://images.unsplash.com/photo-1512436991641-6745cdb1723f?auto=format&fit=crop&w=1200&q=80";
 
 export default function Hero() {
+	const navigate = useNavigate();
 	return (
 		<div className="relative isolate px-6 pt-14 lg:px-8 min-h-[80vh] flex items-center justify-center bg-gray-900">
 			{/* Image de fond prêt-à-porter */}
@@ -24,7 +27,8 @@ export default function Hero() {
 						Profitez des dernières tendances à prix doux, livraison rapide et service client premium. Faites-vous plaisir dès aujourd'hui !
 					</p>
 					<div className="mt-10 flex items-center justify-center gap-x-6">
-						<Button>
+						{/* Bouton qui redirige vers le catalogue */}
+						<Button onClick={() => navigate('/catalog')}>
 							Découvrir la boutique
 						</Button>
 					</div>
