@@ -8,7 +8,7 @@ export const products = [
     price: 89.99,
     promoPrice: 69.99, // Prix promotionnel
     isPromo: true,     // En promotion
-    image: "./public/shoes.jpg",
+    image: "/shoes.jpg",
     description: "Chaussures de sport confortables."
   },
   {
@@ -17,7 +17,7 @@ export const products = [
     price: 49.99,
     promoPrice: 39.99,
     isPromo: true,
-    image: "./public/shoes.jpg",
+    image: "/shoes.jpg",
     description: "Chaussures de sport confortables."
   },
   {
@@ -26,7 +26,7 @@ export const products = [
     price: 29.99,
     promoPrice: 29.99,
     isPromo: false,
-    image: "./public/shoes.jpg",
+    image: "/shoes.jpg",
     description: "Chaussures de sport confortables."
   },
   {
@@ -35,7 +35,7 @@ export const products = [
     price: 19.99,
     promoPrice: 14.99,
     isPromo: true,
-    image: "./public/shoes.jpg",
+    image: "/shoes.jpg",
     description: "Chaussures de sport confortables."
   },
   {
@@ -44,7 +44,7 @@ export const products = [
     price: 129.99,
     promoPrice: 99.99,
     isPromo: true,
-    image: "./public/shoes.jpg",
+    image: "/shoes.jpg",
     description: "Chaussures de sport confortables."
   },
   {
@@ -53,7 +53,7 @@ export const products = [
     price: 69.99,
     promoPrice: 69.99,
     isPromo: false,
-    image: "./public/shoes.jpg",
+    image: "/shoes.jpg",
     description: "Chaussures de sport confortables."
   },
 

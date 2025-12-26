@@ -11,15 +11,16 @@ import PromotionSection from './components/layout/promotionSection';
 import Footer from './components/layout/footer';
 import Registration from './pages/account/registration';
 import Login from './pages/account/login';
+
 import NotFound from './pages/notFound';
 import Catalog from './pages/catalog/catalog';
 import ProductPromo from './pages/catalog/productPromo';
 import ContactForm from './components/forms/contactForm';
+import ProductPage from './pages/product/productPage';
 
 // Pages de base (à remplacer par tes vraies pages si besoin)
 const Boutique = () => <div style={{ padding: 24 }}>Boutique</div>;
 const Promotions = () => <div style={{ padding: 24 }}>Promotions</div>;
-const Contact = () => <div style={{ padding: 24 }}>Contact</div>;
 
 function Home() {
   useEffect(() => {
@@ -59,6 +60,7 @@ function App() {
       <Route path="/catalog" element={<Catalog />} />
       <Route path="/product-promo" element={<ProductPromo />} />
       <Route path="/contact" element={<ContactForm />} />
+      <Route path="/product/:id" element={<ProductPage />} />
       <Route path="*" element={<NotFound />} />
     </Routes>
   );
