@@ -1,6 +1,5 @@
 import { useEffect } from 'react';
 import { Routes, Route } from 'react-router-dom';
-
 import Topbar from './components/layout/topbar';
 import Header from './components/layout/headers';
 import Hero from './components/layout/hero';
@@ -19,6 +18,9 @@ import ProductPage from './pages/product/productPage';
 import SearchResult from './pages/search/searchResult';
 import CartPage from './pages/cart/cartPage';
 import CategoriesPage from './pages/category/categories';
+
+
+import AdminPage from './pages/admin/adminPage';
 
 // Pages de base (à remplacer par tes vraies pages si besoin)
 const Boutique = () => <div style={{ padding: 24 }}>Boutique</div>;
@@ -54,6 +56,7 @@ function Home() {
 function App() {
   return (
     <Routes>
+      {/* Route des pages PUBLIQUES */}
       <Route path="/" element={<Home />} />
       <Route path="/boutique" element={<Boutique />} />
       <Route path="/promotions" element={<Promotions />} />
@@ -67,6 +70,10 @@ function App() {
       <Route path="/cartPage" element={<CartPage />} />
       <Route path="/categories" element={<CategoriesPage />} />
       <Route path="*" element={<NotFound />} />
+
+
+      {/* Route des pages ADMIN */}
+      <Route path="/admin" element={<AdminPage />} />
     </Routes>
   );
 }
