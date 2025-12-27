@@ -2,7 +2,7 @@
 
 import { Link, useLocation } from "react-router-dom";
 import { useState } from "react";
-import { FaHome, FaBoxOpen, FaTags, FaUsers, FaCog, FaBars, FaStar, FaSignOutAlt, FaClipboardList, FaChartBar, FaThList, FaBoxes, FaEnvelope, FaBook, FaHistory, FaQuestionCircle } from "react-icons/fa";
+import { FaHome, FaBoxOpen, FaTags, FaUsers, FaCog, FaStar, FaSignOutAlt, FaClipboardList, FaChartBar, FaThList, FaBoxes, FaEnvelope, FaHistory, FaQuestionCircle } from "react-icons/fa";
 import logo from '../../../assets/react.svg';
 
 const sidebarLinks = [
@@ -78,7 +78,7 @@ const AdminSidebar = () => {
         <div className="mt-auto px-6 py-4 border-t border-gray-100 flex flex-col gap-3">
           <button
             className="flex items-center gap-2 px-4 py-2 rounded-lg text-white hover:bg-red-50 font-medium text-base transition border border-transparent hover:border-red-200"
-            onClick={() => {/* TODO: log out logic */}}
+            onClick={() => { window.location.href = '/'; }} 
             title="Déconnexion"
           >
             <FaSignOutAlt className="text-lg" />

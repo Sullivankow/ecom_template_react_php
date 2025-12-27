@@ -2,17 +2,19 @@
 
 
 // Importation du header et du footer pour l'affichage global
+
 import Header from '../../components/layout/headers';
 import Footer from '../../components/layout/footer';
-// Importation du hook personnalisé pour la gestion du panier
 import { useCart } from '../../hooks/useCart';
-// Importation du bouton corbeille
 import { ButtonDeleted } from '../../components/ui/button';
+import { useNavigate } from 'react-router-dom';
+
 
 // Composant principal de la page panier
 const CartPage: React.FC = () => {
   // Récupération des fonctions et données du panier via le hook useCart
   const { cart, updateQuantity, removeFromCart, clearCart, total } = useCart();
+  const navigate = useNavigate();
 
   return (
     <>
@@ -81,8 +83,11 @@ const CartPage: React.FC = () => {
             </div>
             {/* Bouton pour passer à la caisse */}
             <div style={{ textAlign: 'right', marginTop: 24 }}>
-              <button style={{ background: '#007bff', color: '#fff', padding: '12px 32px', fontSize: 18, border: 'none', borderRadius: 4 }}>
-                Passer à la caisse
+              <button
+                style={{ background: '#007bff', color: '#fff', padding: '12px 32px', fontSize: 18, border: 'none', borderRadius: 4 }}
+                onClick={() => navigate('/checkout')}
+              >
+                Valider les articles
               </button>
             </div>
           </>

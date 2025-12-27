@@ -18,6 +18,7 @@ import ProductPage from './pages/product/productPage';
 import SearchResult from './pages/search/searchResult';
 import CartPage from './pages/cart/cartPage';
 import CategoriesPage from './pages/category/categories';
+import CheckoutForm from './pages/checkout/checkoutForm';
 
 
 import AdminPage from './pages/admin/adminPage';
@@ -69,6 +70,7 @@ function App() {
       <Route path="/search" element={<SearchResult />} />
       <Route path="/cartPage" element={<CartPage />} />
       <Route path="/categories" element={<CategoriesPage />} />
+      <Route path="/checkout" element={<CheckoutForm />} />
       <Route path="*" element={<NotFound />} />
 
 
