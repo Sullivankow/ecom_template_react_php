@@ -75,7 +75,21 @@ function App() {
 
 
       {/* Route des pages ADMIN */}
-      <Route path="/admin" element={<AdminPage />} />
+      <Route path="/admin" element={<AdminPage />}>
+        <Route index element={<div>Bienvenue sur le dashboard admin</div>} />
+        <Route path="stats" element={<div>Statistiques</div>} />
+        <Route path="categories" element={<div>Catégories</div>} />
+        <Route path="products" element={<div>Produits</div>} />
+        <Route path="stocks" element={<div>Gestion des stocks</div>} />
+        <Route path="promos" element={<div>Promotions</div>} />
+        <Route path="orders" element={<div>Commandes</div>} />
+        <Route path="users" element={<div>Utilisateurs</div>} />
+        <Route path="support" element={<div>Messages / Support</div>} />
+        <Route path="reviews" element={<div>Avis</div>} />
+        <Route path="logs" element={<div>Journal d'activité</div>} />
+        <Route path="faq" element={<div>FAQ</div>} />
+        <Route path="settings" element={<div>Paramètres</div>} />
+      </Route>
     </Routes>
   );
 }
