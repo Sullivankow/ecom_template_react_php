@@ -1,4 +1,7 @@
 import React, { useState } from "react";
+import { FaSignOutAlt } from "react-icons/fa";
+// Import du hook d'authentification personnalisé
+import { useAuth } from '../../hooks/authContext';
 // Import du hook panier pour afficher le nombre d'articles
 import { useCart } from '../../hooks/useCart';
 import { Link, useNavigate } from "react-router-dom";
@@ -23,6 +26,8 @@ const Header: React.FC = () => {
   // Calcul du nombre total d'articles dans le panier
   const cartCount = cart.reduce((sum, item) => sum + item.quantity, 0);
   const [profileMenuOpen, setProfileMenuOpen] = useState(false);
+  // Récupération des infos d'authentification (user, role, loading, logout)
+  const { user, role, loading, logout } = useAuth();
   // Gestion du clic en dehors du menu profil pour le fermer
   React.useEffect(() => {
     if (!profileMenuOpen) return;
@@ -222,15 +227,44 @@ const Header: React.FC = () => {
                 style={{minWidth: 120}}
                 tabIndex={-1}
               >
-                <Link
-                  to="/login"
-                  className="block px-4 py-2 text-gray-700 hover:text-black transition"
-                  style={{ borderRadius: 0, background: 'none' }}
-                  onClick={() => setProfileMenuOpen(false)}
-                >
-                  Connexion
-                </Link>
-                {/* D'autres liens peuvent être ajoutés ici */}
+                {/* Affichage conditionnel selon l'état de connexion */}
+                {/* Si l'utilisateur n'est pas connecté, on affiche le lien Connexion */}
+                {!user && !loading && (
+                  <Link
+                    to="/login"
+                    className="block px-4 py-2 text-gray-700 hover:text-black transition"
+                    style={{ borderRadius: 0, background: 'none' }}
+                    onClick={() => setProfileMenuOpen(false)}
+                  >
+                    Connexion
+                  </Link>
+                )}
+                {/* Si l'utilisateur est connecté et admin, on affiche Admin et Déconnexion */}
+                {user && role === 'admin' && !loading && (
+                  <>
+                    <Link
+                      to="/admin"
+                      className="block px-4 py-2 text-gray-700 hover:text-black transition"
+                      style={{ borderRadius: 0, background: 'none' }}
+                      onClick={() => setProfileMenuOpen(false)}
+                    >
+                      Admin
+                    </Link>
+                    {/* Bouton Déconnexion identique à la sidebar admin */}
+                    <button
+                      className="flex items-center gap-2 px-4 py-2 rounded-lg text-white hover:bg-red-50 font-medium text-base transition border border-transparent hover:border-red-200 w-full text-left"
+                      onClick={async () => {
+                        await logout();
+                        setProfileMenuOpen(false);
+                        navigate('/'); // Redirige vers l'accueil après déconnexion
+                      }}
+                      title="Déconnexion"
+                    >
+                      <FaSignOutAlt className="text-lg" />
+                      Déconnexion
+                    </button>
+                  </>
+                )}
               </div>
             )}
           </div>
