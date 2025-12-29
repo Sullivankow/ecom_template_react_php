@@ -84,7 +84,7 @@ function AdminStats() {
             </tr>
           </thead>
           <tbody>
-            {stats.topProducts.map((prod, idx) => (
+            {stats.topProducts.map((prod) => (
               <tr key={prod.name} className="border-t">
                 <td className="py-1">{prod.name}</td>
                 <td className="py-1">{prod.sold}</td>

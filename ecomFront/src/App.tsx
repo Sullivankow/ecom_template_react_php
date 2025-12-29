@@ -20,6 +20,7 @@ import CartPage from './pages/cart/cartPage';
 import CategoriesPage from './pages/category/categories';
 import CheckoutForm from './pages/checkout/checkoutForm';
 import AdminStats from './pages/admin/components/adminStats';
+import AdminDashboard from './pages/admin/components/adminDashboard';
 
 import AdminPage from './pages/admin/adminPage';
 // Import du provider Auth
@@ -99,6 +100,7 @@ function App() {
         }>
           <Route index element={<div>Bienvenue sur le dashboard admin</div>} />
           <Route path="stats" element={<AdminStats />} />
+          <Route path="dashboard" element={<AdminDashboard />} />
           <Route path="categories" element={<div>Catégories</div>} />
           <Route path="products" element={<div>Produits</div>} />
           <Route path="stocks" element={<div>Gestion des stocks</div>} />

@@ -8,7 +8,7 @@ import logo from '../../../assets/react.svg';
 
 const sidebarLinks = [
   { name: "Statistiques", to: "/admin/stats", icon: <FaChartBar /> },
-  { name: "Dashboard", to: "/admin", icon: <FaHome /> },
+  { name: "Dashboard", to: "/admin/dashboard", icon: <FaHome /> },
   { name: "Catégories", to: "/admin/categories", icon: <FaThList /> },
   { name: "Produits", to: "/admin/products", icon: <FaBoxOpen /> },
   { name: "Gestion des stocks", to: "/admin/stocks", icon: <FaBoxes /> },
