@@ -19,6 +19,7 @@ import SearchResult from './pages/search/searchResult';
 import CartPage from './pages/cart/cartPage';
 import CategoriesPage from './pages/category/categories';
 import CheckoutForm from './pages/checkout/checkoutForm';
+import AdminStats from './pages/admin/components/adminStats';
 
 import AdminPage from './pages/admin/adminPage';
 // Import du provider Auth
@@ -97,7 +98,7 @@ function App() {
           </RequireAdmin>
         }>
           <Route index element={<div>Bienvenue sur le dashboard admin</div>} />
-          <Route path="stats" element={<div>Statistiques</div>} />
+          <Route path="stats" element={<AdminStats />} />
           <Route path="categories" element={<div>Catégories</div>} />
           <Route path="products" element={<div>Produits</div>} />
           <Route path="stocks" element={<div>Gestion des stocks</div>} />
