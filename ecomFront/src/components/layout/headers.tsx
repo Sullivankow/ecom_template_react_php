@@ -223,7 +223,7 @@ const Header: React.FC = () => {
             </button>
             {profileMenuOpen && (
               <div
-                className="absolute right-0 mt-2 w-40 bg-white border border-gray-200 rounded-lg shadow-lg z-50 animate-fade-in"
+                className="absolute right-0 mt-4 w-40 bg-white border border-gray-200 rounded-lg shadow-lg z-50 animate-fade-in"
                 style={{minWidth: 120}}
                 tabIndex={-1}
               >
