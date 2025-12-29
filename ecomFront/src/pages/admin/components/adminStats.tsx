@@ -24,7 +24,7 @@ const stats = {
 function AdminStats() {
   return (
     <div className="p-6">
-      <h1 className="text-2xl font-bold mb-6">Statistiques générales</h1>
+      <h2 className="text-2xl font-bold mb-6 text-center">Statistiques générales</h2>
       {/* Cartes principales */}
       <div className="grid grid-cols-1 md:grid-cols-3 gap-6 mb-8">
         <div className="bg-white rounded-lg shadow p-5 flex items-center gap-4">

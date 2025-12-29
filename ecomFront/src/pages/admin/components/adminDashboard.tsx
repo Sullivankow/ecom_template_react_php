@@ -78,7 +78,7 @@ const alerts = [
 function AdminDashboard() {
   return (
     <div className="space-y-6 sm:space-y-8 px-1 sm:px-0 w-full max-w-full">
-      <h1 className="text-2xl sm:text-3xl font-bold text-gray-900 mb-2 sm:mb-4 text-center sm:text-left">Dashboard administrateur</h1>
+      <h2 className="text-2xl sm:text-3xl font-bold text-gray-900 mb-2 sm:mb-4 text-center">Dashboard</h2>
       {/* Alertes */}
       <div className="flex flex-col sm:flex-row flex-wrap gap-2 sm:gap-4">
         {alerts.map((alert, i) => (
