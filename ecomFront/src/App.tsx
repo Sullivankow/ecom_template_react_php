@@ -100,7 +100,11 @@ function App() {
             <AdminPage />
           </RequireAdmin>
         }>
-          <Route index element={<div>Bienvenue sur le dashboard admin</div>} />
+          <Route index element={
+            <div style={{ minHeight: '80vh' }} className="flex items-center justify-center">
+              <span className="text-4xl font-bold text-center">Bienvenue sur l'interface admin</span>
+            </div>
+          } />
           <Route path="stats" element={<AdminStats />} />
           <Route path="dashboard" element={<AdminDashboard />} />
           <Route path="categories" element={<AdminCategories />} />
