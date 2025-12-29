@@ -1,7 +1,8 @@
 
 
-import { Link, useLocation } from "react-router-dom";
+import { Link, useLocation, useNavigate } from "react-router-dom";
 import { useState } from "react";
+import { useAuth } from '../../../hooks/authContext';
 import { FaHome, FaBoxOpen, FaTags, FaUsers, FaCog, FaStar, FaSignOutAlt, FaClipboardList, FaChartBar, FaThList, FaBoxes, FaEnvelope, FaHistory, FaQuestionCircle } from "react-icons/fa";
 import logo from '../../../assets/react.svg';
 
@@ -24,6 +25,9 @@ const sidebarLinks = [
 const AdminSidebar = () => {
   const location = useLocation();
   const [open, setOpen] = useState(false);
+  const navigate = useNavigate();
+  // Récupération de la fonction logout du contexte Auth
+  const { logout } = useAuth();
 
   return (
     <>
@@ -76,9 +80,23 @@ const AdminSidebar = () => {
           ))}
         </nav>
         <div className="mt-auto px-6 py-4 border-t border-gray-100 flex flex-col gap-3">
+          {/* Lien retour en boutique */}
+          <Link
+            to="/"
+            className="flex items-center gap-2 px-4 py-2 rounded-lg text-gray-700 hover:bg-gray-100 font-medium text-base transition border border-transparent hover:border-blue-200"
+            title="Retour en boutique"
+          >
+            {/* Icône maison déjà utilisée plus haut, on peut la réutiliser ou choisir une autre */}
+            <FaHome className="text-lg" />
+            Retour en boutique
+          </Link>
+          {/* Bouton déconnexion qui utilise le contexte Auth */}
           <button
             className="flex items-center gap-2 px-4 py-2 rounded-lg text-white hover:bg-red-50 font-medium text-base transition border border-transparent hover:border-red-200"
-            onClick={() => { window.location.href = '/'; }} 
+            onClick={async () => {
+              await logout();
+              navigate('/');
+            }}
             title="Déconnexion"
           >
             <FaSignOutAlt className="text-lg" />
