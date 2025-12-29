@@ -22,6 +22,7 @@ import CheckoutForm from './pages/checkout/checkoutForm';
 import AdminStats from './pages/admin/components/adminStats';
 import AdminDashboard from './pages/admin/components/adminDashboard';
 import AdminProducts from './pages/admin/components/adminProducts';
+import AdminCategories from './pages/admin/components/adminCategories';
 
 import AdminPage from './pages/admin/adminPage';
 // Import du provider Auth
@@ -102,7 +103,7 @@ function App() {
           <Route index element={<div>Bienvenue sur le dashboard admin</div>} />
           <Route path="stats" element={<AdminStats />} />
           <Route path="dashboard" element={<AdminDashboard />} />
-          <Route path="categories" element={<div>Catégories</div>} />
+          <Route path="categories" element={<AdminCategories />} />
           <Route path="products" element={<AdminProducts />} />
           <Route path="stocks" element={<div>Gestion des stocks</div>} />
           <Route path="promos" element={<div>Promotions</div>} />
