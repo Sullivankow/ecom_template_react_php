@@ -8,8 +8,11 @@
  * - Validation avec yup
  */
 import React, { useState } from "react";
-import { Link } from "react-router-dom";
+import { Link, useNavigate } from "react-router-dom";
 import { loginSchema } from "../../lib/validation";
+import { auth, db } from "../../lib/firebase";
+import { signInWithEmailAndPassword, GoogleAuthProvider, signInWithPopup } from "firebase/auth";
+import { doc, getDoc } from "firebase/firestore";
 
 // Icônes SVG pour Google et GitHub
 const GoogleIcon = () => (
@@ -23,33 +26,60 @@ const GoogleIcon = () => (
 
 
 
-
 const Login: React.FC = () => {
   // États pour les champs et l'erreur
   const [email, setEmail] = useState("");
   const [password, setPassword] = useState("");
   const [error, setError] = useState("");
+  const navigate = useNavigate();
 
-  // Soumission du formulaire avec validation yup
+  // Connexion Google
+  const handleGoogleLogin = async () => {
+    setError("");
+    try {
+      const provider = new GoogleAuthProvider();
+      const result = await signInWithPopup(auth, provider);
+      const user = result.user;
+      // Récupération du rôle dans Firestore
+      const userDoc = await getDoc(doc(db, "users", user.uid));
+      if (userDoc.exists()) {
+        const role = userDoc.data().role;
+        if (role === "admin") {
+          navigate("/admin");
+        } else {
+          setError("Accès réservé aux administrateurs.");
+        }
+      } else {
+        setError("Utilisateur non trouvé dans la base de données.");
+      }
+    } catch (err: any) {
+      setError(err.message || "Erreur lors de la connexion Google.");
+    }
+  };
   const handleSubmit = async (e: React.FormEvent) => {
     e.preventDefault();
     setError("");
     try {
-		await loginSchema.validate({ email, password });
-
-		 // Simulation d'une connexion locale
-      if (email !== "sundly@live.fr" || password !== "Azerty123") {
-        setError("Email ou mot de passe incorrect !");
-        return;
+      await loginSchema.validate({ email, password });
+      // Connexion avec Firebase Auth
+      const userCredential = await signInWithEmailAndPassword(auth, email, password);
+      const user = userCredential.user;
+      // Récupération du rôle dans Firestore
+      const userDoc = await getDoc(doc(db, "users", user.uid));
+      if (userDoc.exists()) {
+        const role = userDoc.data().role;
+        if (role === "admin") {
+          navigate("/admin");
+        } else {
+          setError("Accès réservé aux administrateurs.");
+        }
+      } else {
+        setError("Utilisateur non trouvé dans la base de données.");
       }
-      // Ici, tu continues la logique de connexion (API, etc.)
-      alert("Connexion réussie !");
-      
-		
     } catch (err: any) {
-      setError(err.message); // Affiche le message d’erreur de yup
+      setError(err.message || "Erreur lors de la connexion.");
     }
-	};
+  };
 	
 
 	
@@ -124,7 +154,7 @@ const Login: React.FC = () => {
               <div className="flex-grow border-t border-gray-200" />
             </div>
             <div className="mt-4 flex justify-center">
-              <button className="flex items-center justify-center gap-2 py-2 px-6 rounded-md bg-blue-600 hover:bg-blue-700 transition border border-blue-600" aria-label="Se connecter avec Google">
+              <button type="button" onClick={handleGoogleLogin} className="flex items-center justify-center gap-2 py-2 px-6 rounded-md bg-blue-600 hover:bg-blue-700 transition border border-blue-600" aria-label="Se connecter avec Google">
                 <GoogleIcon />
                 <span className="text-sm text-white">Google</span>
               </button>
