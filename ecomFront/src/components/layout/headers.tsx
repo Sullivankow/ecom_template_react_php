@@ -22,6 +22,19 @@ const Header: React.FC = () => {
   const { cart } = useCart();
   // Calcul du nombre total d'articles dans le panier
   const cartCount = cart.reduce((sum, item) => sum + item.quantity, 0);
+  const [profileMenuOpen, setProfileMenuOpen] = useState(false);
+  // Gestion du clic en dehors du menu profil pour le fermer
+  React.useEffect(() => {
+    if (!profileMenuOpen) return;
+    const handleClick = (e: MouseEvent) => {
+      const target = e.target as HTMLElement;
+      if (!target.closest('.profile-menu-container')) {
+        setProfileMenuOpen(false);
+      }
+    };
+    document.addEventListener('mousedown', handleClick);
+    return () => document.removeEventListener('mousedown', handleClick);
+  }, [profileMenuOpen]);
   return (
     <header className="w-full bg-white shadow-md sticky top-0 z-50">
       <div className="max-w-7xl mx-auto flex items-center justify-between px-4 py-2 md:py-3">
@@ -187,22 +200,40 @@ const Header: React.FC = () => {
               </span>
             )}
           </span>
-          {/* Connexion */}
-          <Link
-            to="/login"
-            title="Connexion"
-            className="text-black cursor-pointer transition-transform hover:scale-110 hover:text-gray-900"
-            onClick={(e) => {
-              e.preventDefault();
-              navigate('/login');
-            }}
-          >
-            {/* Icône profil moderne */}
-            <svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 24 24" className="w-6 h-6" fill="none" stroke="currentColor" strokeWidth="1.7">
-              <circle cx="12" cy="8" r="4" stroke="currentColor" strokeWidth="1.7" />
-              <path d="M4.5 19c0-2.485 3.357-4.5 7.5-4.5s7.5 2.015 7.5 4.5" stroke="currentColor" strokeWidth="1.7" strokeLinecap="round" />
-            </svg>
-          </Link>
+          {/* Profil avec sous-menu */}
+          <div className="relative profile-menu-container" style={{display: 'flex', alignItems: 'center'}}>
+            <button
+              title="Profil"
+              className="text-black cursor-pointer transition-transform hover:scale-110 focus:outline-none rounded-full p-1"
+              onClick={() => setProfileMenuOpen((v) => !v)}
+              style={{ background: 'none', border: 'none' }}
+              aria-haspopup="true"
+              aria-expanded={profileMenuOpen}
+            >
+              {/* Icône profil moderne */}
+              <svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 24 24" className="w-6 h-6" fill="none" stroke="#000" strokeWidth="1.7" style={{color: '#000'}}>
+                <circle cx="12" cy="8" r="4" stroke="#000" strokeWidth="1.7" />
+                <path d="M4.5 19c0-2.485 3.357-4.5 7.5-4.5s7.5 2.015 7.5 4.5" stroke="#000" strokeWidth="1.7" strokeLinecap="round" />
+              </svg>
+            </button>
+            {profileMenuOpen && (
+              <div
+                className="absolute right-0 mt-2 w-40 bg-white border border-gray-200 rounded-lg shadow-lg z-50 animate-fade-in"
+                style={{minWidth: 120}}
+                tabIndex={-1}
+              >
+                <Link
+                  to="/login"
+                  className="block px-4 py-2 text-gray-700 hover:text-black transition"
+                  style={{ borderRadius: 0, background: 'none' }}
+                  onClick={() => setProfileMenuOpen(false)}
+                >
+                  Connexion
+                </Link>
+                {/* D'autres liens peuvent être ajoutés ici */}
+              </div>
+            )}
+          </div>
         </div>
       </div>
 
