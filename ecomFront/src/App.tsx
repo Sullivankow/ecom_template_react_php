@@ -27,6 +27,8 @@ import AdminStock from './pages/admin/components/adminStock';
 import AdminPromotion from './pages/admin/components/adminPromotion';
 import AdminOrder from './pages/admin/components/adminOrder';
 import AdminUser from './pages/admin/components/adminUser';
+import AdminMessage from './pages/admin/components/adminMessage';
+
 
 import AdminPage from './pages/admin/adminPage';
 // Import du provider Auth
@@ -117,7 +119,7 @@ function App() {
           <Route path="promos" element={<AdminPromotion />} />
           <Route path="orders" element={<AdminOrder />} />
           <Route path="users" element={<AdminUser />} />
-          <Route path="support" element={<div>Messages / Support</div>} />
+          <Route path="support" element={<AdminMessage />} />
           <Route path="reviews" element={<div>Avis</div>} />
           <Route path="logs" element={<div>Journal d'activité</div>} />
           <Route path="faq" element={<div>FAQ</div>} />
