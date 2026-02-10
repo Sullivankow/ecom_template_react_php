@@ -5,7 +5,7 @@ import { useAuth } from '../../hooks/authContext';
 // Import du hook panier pour afficher le nombre d'articles
 import { useCart } from '../../hooks/useCart';
 import { Link, useNavigate } from "react-router-dom";
-import logo from "../../assets/react.svg";
+import logo from "../../assets/logo-chariot.svg";
 
 
 // Menu de navigation principal
@@ -61,7 +61,7 @@ const Header: React.FC = () => {
         {/* Logo & Nom au centre en mobile, à gauche en desktop */}
         <div className="flex items-center gap-2 min-w-[100px] order-2 md:order-1 flex-1 justify-center md:justify-start">
           <Link to="/" aria-label="Accueil">
-            <img src={logo} alt="Logo" className="w-8 h-8 md:w-10 md:h-10" />
+            <img src={logo} alt="Logo chariot" className="w-8 h-8 md:w-10 md:h-10" />
           </Link>
           <span className="hidden sm:inline font-bold text-xl md:text-2xl tracking-tight text-black">EcomShop</span>
         </div>

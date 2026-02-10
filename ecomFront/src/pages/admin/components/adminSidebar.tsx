@@ -4,7 +4,7 @@ import { Link, useLocation, useNavigate } from "react-router-dom";
 import { useState } from "react";
 import { useAuth } from '../../../hooks/authContext';
 import { FaHome, FaBoxOpen, FaTags, FaUsers, FaCog, FaStar, FaSignOutAlt, FaClipboardList, FaChartBar, FaThList, FaBoxes, FaEnvelope, FaHistory, FaQuestionCircle } from "react-icons/fa";
-import logo from '../../../assets/react.svg';
+import logo from '../../../assets/logo-chariot.svg';
 
 const sidebarLinks = [
   { name: "Statistiques", to: "/admin/stats", icon: <FaChartBar /> },
@@ -57,10 +57,10 @@ const AdminSidebar = () => {
         style={{ minHeight: '100vh' }}
       >
         <div className="flex items-center gap-2 px-4 py-3 border-b border-gray-100 min-h-[56px]">
-          <Link to="/admin" aria-label="Accueil admin">
-            <img src={logo} alt="Logo" className="w-8 h-8 md:w-10 md:h-10" />
+          <Link to="/admin" aria-label="Accueil admin" className="flex items-center gap-2">
+            <img src={logo} alt="Logo chariot" className="w-8 h-8 md:w-10 md:h-10" />
+            <span className="font-bold text-xl md:text-2xl tracking-tight text-black">EcomAdmin</span>
           </Link>
-          <span className="font-bold text-xl md:text-2xl tracking-tight text-black">EcomAdmin</span>
         </div>
         <nav className="flex-1 py-6 px-2 flex flex-col gap-2">
           {sidebarLinks.map(link => (

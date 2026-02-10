@@ -107,7 +107,7 @@ function AdminStock() {
 													onChange={(e) => updateStock(p.id, Number(e.target.value))}
 													className="w-20 px-2 py-1 rounded border border-gray-300 text-base focus:border-blue-500"
 												/>
-												<button title="Modifier" className="p-2 rounded-full hover:bg-blue-100 transition" style={{ color: '#2563eb', background: '#fff' }}>
+												<button title="Modifier" className="p-2 rounded-full hover:bg-yellow-100 transition" style={{ color: '#eab308', background: '#fff' }}>
 													<FaEdit size={18} />
 												</button>
 												<button title="Supprimer" className="p-2 rounded-full hover:bg-red-100 transition" style={{ color: '#e3342f', background: '#fff' }}>
@@ -149,7 +149,7 @@ function AdminStock() {
 										onChange={(e) => updateStock(p.id, Number(e.target.value))}
 										className="w-20 px-2 py-1 rounded border border-gray-300 text-base focus:border-blue-500"
 									/>
-									<button title="Modifier" className="p-2 rounded-full hover:bg-blue-100 transition" style={{ color: '#2563eb', background: '#fff' }}>
+									<button title="Modifier" className="p-2 rounded-full hover:bg-yellow-100 transition" style={{ color: '#eab308', background: '#fff' }}>
 										<FaEdit size={18} />
 									</button>
 									<button title="Supprimer" className="p-2 rounded-full hover:bg-red-100 transition" style={{ color: '#e3342f', background: '#fff' }}>
