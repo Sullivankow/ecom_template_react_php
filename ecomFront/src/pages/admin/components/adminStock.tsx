@@ -1,5 +1,5 @@
-
 import { useState } from "react";
+import { FaEdit, FaTrash, FaPlus } from 'react-icons/fa';
 
 // Définition du type Produit
 type Produit = {
@@ -65,20 +65,20 @@ function AdminStock() {
 
 			{/* Liste des produits avec leur stock actuel */}
 			<div className="mb-8">
-				<h2 className="text-2xl font-bold mb-4 text-blue-700">Gestion des stocks</h2>
-				<div className="overflow-x-auto">
-					<table className="w-full border-collapse bg-gray-50 rounded-lg">
+				<h2 className="text-xl md:text-2xl font-bold mb-4 text-black text-center sm:text-left">Gestion des stocks</h2>
+				{/* Responsive : tableau sur desktop, cartes sur mobile */}
+				<div className="hidden sm:block overflow-x-auto rounded-lg shadow-sm">
+					<table className="min-w-full bg-white border border-gray-200 text-sm md:text-base">
 						<thead>
-							<tr>
-								<th className="bg-blue-50 font-semibold p-3 text-left">Nom</th>
-								<th className="bg-blue-50 font-semibold p-3 text-left">Catégorie</th>
-								<th className="bg-blue-50 font-semibold p-3 text-left">Stock</th>
-								<th className="bg-blue-50 font-semibold p-3 text-left">Actions</th>
+							<tr className="bg-gray-100">
+								<th className="p-3 border text-left font-semibold text-gray-700">Nom</th>
+								<th className="p-3 border text-left font-semibold text-gray-700">Catégorie</th>
+								<th className="p-3 border text-center font-semibold text-gray-700">Stock</th>
+								<th className="p-3 border text-center font-semibold text-gray-700">Actions</th>
 							</tr>
 						</thead>
 						<tbody>
 							{filteredProducts.map((p) => {
-								// Extraction de la classe de ligne selon le stock
 								let rowClass = "";
 								if (p.stock === 0) {
 									rowClass = "bg-red-50 text-red-700";
@@ -86,11 +86,11 @@ function AdminStock() {
 									rowClass = "bg-yellow-50";
 								}
 								return (
-									<tr key={p.id} className={rowClass}>
-										<td className="p-3">{p.nom}</td>
-										<td className="p-3">{p.categorie}</td>
-										<td className="p-3">
-											{p.stock}
+									<tr key={p.id} className={rowClass + " hover:bg-gray-100 transition-all"}>
+										<td className="p-3 border font-medium text-black align-middle whitespace-nowrap">{p.nom}</td>
+										<td className="p-3 border text-gray-700 align-middle whitespace-nowrap">{p.categorie}</td>
+										<td className="p-3 border text-center align-middle">
+											<span className="font-bold text-gray-700">{p.stock}</span>
 											{p.stock === 0 && (
 												<span className="ml-2 text-xs font-semibold text-red-600">(Épuisé)</span>
 											)}
@@ -98,20 +98,59 @@ function AdminStock() {
 												<span className="ml-2 text-xs font-semibold text-yellow-600">(Faible)</span>
 											)}
 										</td>
-										<td className="p-3">
-											<input
-												type="number"
-												min="0"
-												value={p.stock}
-												onChange={(e) => updateStock(p.id, Number(e.target.value))}
-												className="w-20 px-2 py-1 rounded border border-gray-300 text-base focus:border-blue-500"
-											/>
+										<td className="p-3 border text-center align-middle">
+											<div className="flex items-center gap-2 mt-2">
+												<input
+													type="number"
+													min="0"
+													value={p.stock}
+													onChange={(e) => updateStock(p.id, Number(e.target.value))}
+													className="w-20 px-2 py-1 rounded border border-gray-300 text-base focus:border-blue-500"
+												/>
+												<button title="Modifier" className="p-2 rounded-full hover:bg-blue-100 transition" style={{ color: '#2563eb', background: '#fff' }}>
+													<FaEdit size={18} />
+												</button>
+												<button title="Supprimer" className="p-2 rounded-full hover:bg-red-100 transition" style={{ color: '#e3342f', background: '#fff' }}>
+													<FaTrash size={18} />
+												</button>
+											</div>
 										</td>
 									</tr>
 								);
 							})}
 						</tbody>
 					</table>
+				</div>
+				{/* Cartes sur mobile */}
+				<div className="sm:hidden flex flex-col gap-4">
+					{filteredProducts.map((p) => (
+						<div key={p.id} className={`bg-white border border-gray-200 rounded-xl p-4 shadow-sm flex flex-col gap-2 ${p.stock === 0 ? 'bg-red-50' : p.stock < 5 ? 'bg-yellow-50' : ''}`}>
+							<div className="flex justify-between items-center mb-2">
+								<span className="font-semibold text-black text-base">{p.nom}</span>
+								<span className="text-xs font-medium text-gray-500">{p.categorie}</span>
+							</div>
+							<div className="flex items-center gap-2">
+								<span className="text-base font-bold text-gray-700">Stock : {p.stock}</span>
+								{p.stock === 0 && <span className="text-xs font-semibold text-red-600">(Épuisé)</span>}
+								{p.stock > 0 && p.stock < 5 && <span className="text-xs font-semibold text-yellow-600">(Faible)</span>}
+							</div>
+							<div className="flex items-center gap-2 mt-2">
+								<input
+									type="number"
+									min="0"
+									value={p.stock}
+									onChange={(e) => updateStock(p.id, Number(e.target.value))}
+									className="w-20 px-2 py-1 rounded border border-gray-300 text-base focus:border-blue-500"
+								/>
+								<button title="Modifier" className="p-2 rounded-full hover:bg-blue-100 transition" style={{ color: '#2563eb', background: '#fff' }}>
+									<FaEdit size={18} />
+								</button>
+								<button title="Supprimer" className="p-2 rounded-full hover:bg-red-100 transition" style={{ color: '#e3342f', background: '#fff' }}>
+									<FaTrash size={18} />
+								</button>
+							</div>
+						</div>
+					))}
 				</div>
 			</div>
 
