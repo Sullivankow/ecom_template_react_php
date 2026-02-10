@@ -1,6 +1,5 @@
-
-
 import React, { useState } from "react";
+import { FaEdit, FaTrash, FaPlus } from 'react-icons/fa';
 // On utilise index.css pour styliser la section FAQ admin
 import '../../../index.css';
 
@@ -51,9 +50,9 @@ export default function AdminFaq() {
 	};
 
 	return (
-		<div className="admin-faq-section">
-			<h2>Gestion des FAQs</h2>
-			<form onSubmit={handleSubmit} className="faq-form">
+		<div className="admin-faq-section max-w-xl mx-auto p-8 bg-gray-50 rounded-2xl shadow-lg border border-gray-200">
+			<h2 className="text-xl md:text-2xl font-bold mb-8 text-center sm:text-left text-black">Gestion des FAQs</h2>
+			<form onSubmit={handleSubmit} className="faq-form space-y-6">
 				<input
 					name="question"
 					type="text"
@@ -61,6 +60,7 @@ export default function AdminFaq() {
 					value={form.question}
 					onChange={handleChange}
 					required
+					className="mt-1 w-full p-2 border border-gray-300 rounded-md bg-gray-50 focus:border-blue-600 focus:ring-blue-600 text-gray-700"
 				/>
 				<textarea
 					name="answer"
@@ -68,19 +68,30 @@ export default function AdminFaq() {
 					value={form.answer}
 					onChange={handleChange}
 					required
+					className="mt-1 w-full p-2 border border-gray-300 rounded-md bg-gray-50 focus:border-blue-600 focus:ring-blue-600 text-gray-700"
 				/>
-				<button type="submit">{editId === null ? "Ajouter" : "Modifier"}</button>
-				{editId === null ? null : (
-					<button type="button" onClick={() => { setEditId(null); setForm({ question: "", answer: "" }); }}>Annuler</button>
-				)}
+				<div className="flex gap-2">
+					<button type="submit" className="px-6 py-2 bg-blue-600 text-white rounded-md hover:bg-blue-700 transition font-semibold flex items-center gap-2">
+						<FaPlus /> {editId === null ? "Ajouter" : "Modifier"}
+					</button>
+					{editId === null ? null : (
+						<button type="button" onClick={() => { setEditId(null); setForm({ question: "", answer: "" }); }} className="px-6 py-2 bg-gray-300 text-blue-600 rounded-md hover:bg-gray-400 transition font-semibold">Annuler</button>
+					)}
+				</div>
 			</form>
-			<ul className="faq-list">
+			<ul className="faq-list mt-6">
 				{faqs.map(faq => (
-					<li key={faq.id} className="faq-item">
-						<strong>{faq.question}</strong>
-						<p>{faq.answer}</p>
-						<button onClick={() => handleEdit(faq)}>Éditer</button>
-						<button onClick={() => handleDelete(faq.id)}>Supprimer</button>
+					<li key={faq.id} className="faq-item bg-white border border-gray-200 rounded-xl mb-4 p-4 shadow-sm">
+						<strong className="text-black text-base md:text-lg font-semibold">{faq.question}</strong>
+						<p className="text-gray-700 mb-2">{faq.answer}</p>
+						<div className="flex gap-2">
+							<button onClick={() => handleEdit(faq)} className="px-4 py-1 bg-blue-600 text-white rounded-md hover:bg-blue-700 transition font-medium flex items-center gap-2">
+								<FaEdit /> Éditer
+							</button>
+							<button onClick={() => handleDelete(faq.id)} className="px-4 py-1 bg-red-600 text-white rounded-md hover:bg-red-700 transition font-medium flex items-center gap-2">
+								<FaTrash /> Supprimer
+							</button>
+						</div>
 					</li>
 				))}
 			</ul>

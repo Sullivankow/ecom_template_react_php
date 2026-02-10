@@ -31,6 +31,7 @@ import AdminMessage from './pages/admin/components/adminMessage';
 import AdminReviews from './pages/admin/components/adminReviews';
 import AdminContent from './pages/admin/components/adminContent';
 import AdminFaq from './pages/admin/components/adminFaq';
+import AdminParameter from './pages/admin/components/adminParameter';
 
 
 import AdminPage from './pages/admin/adminPage';
@@ -126,7 +127,7 @@ function App() {
           <Route path="reviews" element={<AdminReviews />} />
           <Route path="logs" element={<AdminContent />} />
           <Route path="faq" element={<AdminFaq />} />
-          <Route path="settings" element={<div>Paramètres</div>} />
+          <Route path="settings" element={<AdminParameter />} />
         </Route>
       </Routes>
     </AuthProvider>
