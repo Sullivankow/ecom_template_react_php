@@ -28,6 +28,7 @@ import AdminPromotion from './pages/admin/components/adminPromotion';
 import AdminOrder from './pages/admin/components/adminOrder';
 import AdminUser from './pages/admin/components/adminUser';
 import AdminMessage from './pages/admin/components/adminMessage';
+import AdminReviews from './pages/admin/components/adminReviews';
 
 
 import AdminPage from './pages/admin/adminPage';
@@ -120,7 +121,7 @@ function App() {
           <Route path="orders" element={<AdminOrder />} />
           <Route path="users" element={<AdminUser />} />
           <Route path="support" element={<AdminMessage />} />
-          <Route path="reviews" element={<div>Avis</div>} />
+          <Route path="reviews" element={<AdminReviews />} />
           <Route path="logs" element={<div>Journal d'activité</div>} />
           <Route path="faq" element={<div>FAQ</div>} />
           <Route path="settings" element={<div>Paramètres</div>} />

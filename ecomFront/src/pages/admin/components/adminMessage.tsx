@@ -1,6 +1,6 @@
 
 import { useState } from "react";
-import { FaTrash, FaEye, FaCheck, FaArchive, FaReply } from "react-icons/fa";
+import { FaTrash, FaEye, FaArchive, FaReply } from "react-icons/fa";
 
 type Message = {
   id: number;
@@ -82,7 +82,7 @@ function MessageRow({ message, onView, onDelete, onStatus, onArchive }: {
 }
 
 function MessageHistory({ history }: { readonly history?: ReadonlyArray<{ date: string; content: string; from: "admin" | "user" }> }) {
-  if (!history || !history.length) return null;
+  if (!history?.length) return null;
   return (
     <div className="space-y-2 mt-2">
       {history.map((h, idx) => (
