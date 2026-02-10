@@ -41,45 +41,6 @@ const initialMessages: Message[] = [
   },
 ];
 
-function MessageRow({ message, onView, onDelete, onStatus, onArchive }: {
-  readonly message: Readonly<Message>;
-  readonly onView: (message: Message) => void;
-  readonly onDelete: (id: number) => void;
-  readonly onStatus: (id: number, status: Message["status"]) => void;
-  readonly onArchive: (id: number) => void;
-}) {
-  return (
-    <tr className="border-b">
-      <td className="p-3 max-w-[120px] truncate">{message.name}</td>
-      <td className="p-3 max-w-[160px] truncate">{message.email}</td>
-      <td className="p-3 max-w-[120px] truncate">{message.subject}</td>
-      <td className="p-3 text-xs md:text-sm">{new Date(message.date).toLocaleDateString('fr-FR')}<br className="md:hidden" /><span className="hidden md:inline"> {new Date(message.date).toLocaleTimeString('fr-FR', { hour: '2-digit', minute: '2-digit' })}</span></td>
-      <td className="p-3 capitalize">
-        <select
-          value={message.status}
-          onChange={e => onStatus(message.id, e.target.value as Message["status"])}
-          className="rounded border border-gray-300 px-2 py-1 text-xs md:text-base"
-        >
-          <option value="nouveau">Nouveau</option>
-          <option value="en cours">En cours</option>
-          <option value="résolu">Résolu</option>
-          <option value="archivé">Archivé</option>
-        </select>
-      </td>
-      <td className="p-3 flex gap-2 flex-wrap items-center">
-        <button onClick={() => onView(message)} title="Voir" className="focus:outline-none hover:text-blue-700 transition" style={{ background: "none", border: "none", padding: 0 }}>
-          <FaEye className="text-blue-600 text-lg" />
-        </button>
-        <button onClick={() => onArchive(message.id)} title="Archiver" className="focus:outline-none hover:text-gray-700 transition" style={{ background: "none", border: "none", padding: 0 }}>
-          <FaArchive className="text-gray-500 text-lg" />
-        </button>
-        <button onClick={() => onDelete(message.id)} title="Supprimer" className="focus:outline-none hover:text-red-700 transition" style={{ background: "none", border: "none", padding: 0 }}>
-          <FaTrash className="text-red-500 text-lg" />
-        </button>
-      </td>
-    </tr>
-  );
-}
 
 function MessageHistory({ history }: { readonly history?: ReadonlyArray<{ date: string; content: string; from: "admin" | "user" }> }) {
   if (!history?.length) return null;
@@ -141,31 +102,59 @@ function AdminMessage() {
           className="w-full md:w-72 px-4 py-2 rounded-lg border border-gray-300 focus:border-blue-500 focus:outline-none text-base"
         />
       </div>
-      <div className="overflow-x-auto">
-        <table className="w-full border-collapse bg-gray-50 rounded-lg text-sm md:text-base">
-          <thead>
-            <tr>
-              <th className="bg-blue-50 font-semibold p-3 text-left">Nom</th>
-              <th className="bg-blue-50 font-semibold p-3 text-left">Email</th>
-              <th className="bg-blue-50 font-semibold p-3 text-left">Sujet</th>
-              <th className="bg-blue-50 font-semibold p-3 text-left">Date</th>
-              <th className="bg-blue-50 font-semibold p-3 text-left">Statut</th>
-              <th className="bg-blue-50 font-semibold p-3 text-left">Actions</th>
-            </tr>
-          </thead>
-          <tbody>
-            {filteredMessages.map((m) => (
-              <MessageRow
-                key={m.id}
-                message={m}
-                onView={handleView}
-                onDelete={handleDelete}
-                onStatus={handleStatus}
-                onArchive={handleArchive}
-              />
-            ))}
-          </tbody>
-        </table>
+      {/* Cards responsive */}
+      <div className="flex flex-col gap-4 mt-6">
+        {filteredMessages.length === 0 ? (
+          <div className="text-center p-4 bg-white rounded shadow">Aucun message trouvé.</div>
+        ) : (
+          filteredMessages.map((m) => (
+            <div key={m.id} className="bg-white rounded-lg shadow p-4 flex flex-col gap-2 border border-gray-200">
+              <div className="font-semibold text-base mb-1">{m.subject}</div>
+              <div className="text-sm text-gray-600 mb-1">De : <span className="font-medium">{m.name}</span> (<span className="font-medium">{m.email}</span>)</div>
+              <div className="text-sm text-gray-600 mb-1">Date : <span className="font-medium">{new Date(m.date).toLocaleString('fr-FR')}</span></div>
+              <div className="text-sm text-gray-600 mb-1">
+                Statut :
+                <select
+                  value={m.status}
+                  onChange={e => handleStatus(m.id, e.target.value as Message["status"])}
+                  className="rounded border border-gray-300 px-2 py-1 text-xs md:text-base ml-2 capitalize"
+                >
+                  <option value="nouveau">Nouveau</option>
+                  <option value="en cours">En cours</option>
+                  <option value="résolu">Résolu</option>
+                  <option value="archivé">Archivé</option>
+                </select>
+              </div>
+              <div className="text-sm text-gray-600 mb-1">Message : <span className="font-medium">{m.content}</span></div>
+              <div className="flex gap-2 mt-2">
+                <button
+                  onClick={() => handleView(m)}
+                  title="Voir"
+                  className="p-2 rounded-full hover:bg-blue-100 transition"
+                  style={{ color: '#2563eb', background: '#fff' }}
+                >
+                  <FaEye size={18} />
+                </button>
+                <button
+                  onClick={() => handleArchive(m.id)}
+                  title="Archiver"
+                  className="p-2 rounded-full hover:bg-gray-200 transition"
+                  style={{ color: '#6b7280', background: '#fff' }}
+                >
+                  <FaArchive size={18} />
+                </button>
+                <button
+                  onClick={() => handleDelete(m.id)}
+                  title="Supprimer"
+                  className="p-2 rounded-full hover:bg-red-100 transition"
+                  style={{ color: '#e3342f', background: '#fff' }}
+                >
+                  <FaTrash size={18} />
+                </button>
+              </div>
+            </div>
+          ))
+        )}
       </div>
       {/* Modal détail message */}
       {selectedMessage && (

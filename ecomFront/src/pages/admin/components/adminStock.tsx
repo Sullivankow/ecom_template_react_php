@@ -1,5 +1,5 @@
 import { useState } from "react";
-import { FaEdit, FaTrash, FaPlus } from 'react-icons/fa';
+import { FaEdit, FaTrash} from 'react-icons/fa';
 
 // Définition du type Produit
 type Produit = {
@@ -123,34 +123,42 @@ function AdminStock() {
 				</div>
 				{/* Cartes sur mobile */}
 				<div className="sm:hidden flex flex-col gap-4">
-					{filteredProducts.map((p) => (
-						<div key={p.id} className={`bg-white border border-gray-200 rounded-xl p-4 shadow-sm flex flex-col gap-2 ${p.stock === 0 ? 'bg-red-50' : p.stock < 5 ? 'bg-yellow-50' : ''}`}>
-							<div className="flex justify-between items-center mb-2">
-								<span className="font-semibold text-black text-base">{p.nom}</span>
-								<span className="text-xs font-medium text-gray-500">{p.categorie}</span>
+					{filteredProducts.map((p) => {
+						let cardBgClass = "";
+						if (p.stock === 0) {
+							cardBgClass = "bg-red-50";
+						} else if (p.stock < 5) {
+							cardBgClass = "bg-yellow-50";
+						}
+						return (
+							<div key={p.id} className={`bg-white border border-gray-200 rounded-xl p-4 shadow-sm flex flex-col gap-2 ${cardBgClass}`}>
+								<div className="flex justify-between items-center mb-2">
+									<span className="font-semibold text-black text-base">{p.nom}</span>
+									<span className="text-xs font-medium text-gray-500">{p.categorie}</span>
+								</div>
+								<div className="flex items-center gap-2">
+									<span className="text-base font-bold text-gray-700">Stock : {p.stock}</span>
+									{p.stock === 0 && <span className="text-xs font-semibold text-red-600">(Épuisé)</span>}
+									{p.stock > 0 && p.stock < 5 && <span className="text-xs font-semibold text-yellow-600">(Faible)</span>}
+								</div>
+								<div className="flex items-center gap-2 mt-2">
+									<input
+										type="number"
+										min="0"
+										value={p.stock}
+										onChange={(e) => updateStock(p.id, Number(e.target.value))}
+										className="w-20 px-2 py-1 rounded border border-gray-300 text-base focus:border-blue-500"
+									/>
+									<button title="Modifier" className="p-2 rounded-full hover:bg-blue-100 transition" style={{ color: '#2563eb', background: '#fff' }}>
+										<FaEdit size={18} />
+									</button>
+									<button title="Supprimer" className="p-2 rounded-full hover:bg-red-100 transition" style={{ color: '#e3342f', background: '#fff' }}>
+										<FaTrash size={18} />
+									</button>
+								</div>
 							</div>
-							<div className="flex items-center gap-2">
-								<span className="text-base font-bold text-gray-700">Stock : {p.stock}</span>
-								{p.stock === 0 && <span className="text-xs font-semibold text-red-600">(Épuisé)</span>}
-								{p.stock > 0 && p.stock < 5 && <span className="text-xs font-semibold text-yellow-600">(Faible)</span>}
-							</div>
-							<div className="flex items-center gap-2 mt-2">
-								<input
-									type="number"
-									min="0"
-									value={p.stock}
-									onChange={(e) => updateStock(p.id, Number(e.target.value))}
-									className="w-20 px-2 py-1 rounded border border-gray-300 text-base focus:border-blue-500"
-								/>
-								<button title="Modifier" className="p-2 rounded-full hover:bg-blue-100 transition" style={{ color: '#2563eb', background: '#fff' }}>
-									<FaEdit size={18} />
-								</button>
-								<button title="Supprimer" className="p-2 rounded-full hover:bg-red-100 transition" style={{ color: '#e3342f', background: '#fff' }}>
-									<FaTrash size={18} />
-								</button>
-							</div>
-						</div>
-					))}
+						);
+					})}
 				</div>
 			</div>
 

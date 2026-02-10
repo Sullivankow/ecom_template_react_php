@@ -71,11 +71,11 @@ export default function AdminFaq() {
 					className="mt-1 w-full p-2 border border-gray-300 rounded-md bg-gray-50 focus:border-blue-600 focus:ring-blue-600 text-gray-700"
 				/>
 				<div className="flex gap-2">
-					<button type="submit" className="px-6 py-2 bg-blue-600 text-white rounded-md hover:bg-blue-700 transition font-semibold flex items-center gap-2">
-						<FaPlus /> {editId === null ? "Ajouter" : "Modifier"}
+					<button type="submit" className="p-2 rounded-full hover:bg-blue-100 transition" style={{ color: '#2563eb', background: '#fff' }}>
+						<FaPlus size={18} />
 					</button>
 					{editId === null ? null : (
-						<button type="button" onClick={() => { setEditId(null); setForm({ question: "", answer: "" }); }} className="px-6 py-2 bg-gray-300 text-blue-600 rounded-md hover:bg-gray-400 transition font-semibold">Annuler</button>
+						<button type="button" onClick={() => { setEditId(null); setForm({ question: "", answer: "" }); }} className="p-2 rounded-full hover:bg-gray-200 transition" style={{ color: '#2563eb', background: '#fff' }}>Annuler</button>
 					)}
 				</div>
 			</form>
@@ -85,11 +85,11 @@ export default function AdminFaq() {
 						<strong className="text-black text-base md:text-lg font-semibold">{faq.question}</strong>
 						<p className="text-gray-700 mb-2">{faq.answer}</p>
 						<div className="flex gap-2">
-							<button onClick={() => handleEdit(faq)} className="px-4 py-1 bg-blue-600 text-white rounded-md hover:bg-blue-700 transition font-medium flex items-center gap-2">
-								<FaEdit /> Éditer
+							<button onClick={() => handleEdit(faq)} title="Éditer" className="p-2 rounded-full hover:bg-blue-100 transition" style={{ color: '#2563eb', background: '#fff' }}>
+								<FaEdit size={18} />
 							</button>
-							<button onClick={() => handleDelete(faq.id)} className="px-4 py-1 bg-red-600 text-white rounded-md hover:bg-red-700 transition font-medium flex items-center gap-2">
-								<FaTrash /> Supprimer
+							<button onClick={() => handleDelete(faq.id)} title="Supprimer" className="p-2 rounded-full hover:bg-red-100 transition" style={{ color: '#e3342f', background: '#fff' }}>
+								<FaTrash size={18} />
 							</button>
 						</div>
 					</li>

@@ -1,4 +1,3 @@
-
 import { useState } from "react";
 
 // Type de commande
@@ -43,49 +42,6 @@ const initialOrders: Order[] = [
 ];
 
 
-function OrderRow({ order, onStatusChange, onView, onDelete }: {
-  readonly order: Readonly<Order>;
-  readonly onStatusChange: (id: number, status: Order["status"]) => void;
-  readonly onView: (order: Order) => void;
-  readonly onDelete: (id: number) => void;
-}) {
-  return (
-    <tr key={order.id} className="border-b">
-      <td className="p-3">{order.id}</td>
-      <td className="p-3">{order.client}</td>
-      <td className="p-3">{order.date}</td>
-      <td className="p-3">
-        <select
-          value={order.status}
-          onChange={(e) => onStatusChange(order.id, e.target.value as Order["status"])}
-          className="rounded border border-gray-300 px-2 py-1 text-xs md:text-base"
-        >
-          <option value="en attente">En attente</option>
-          <option value="expédiée">Expédiée</option>
-          <option value="livrée">Livrée</option>
-          <option value="annulée">Annulée</option>
-        </select>
-      </td>
-      <td className="p-3">{order.total.toFixed(2)} €</td>
-      <td className="p-3">{order.payment}</td>
-      <td className="p-3 flex gap-2 flex-wrap items-center">
-        <button
-          onClick={() => onView(order)}
-          className="bg-blue-600 text-white px-3 py-1 rounded text-xs md:text-base hover:bg-blue-700 transition"
-        >
-          Voir
-        </button>
-        <button
-          onClick={() => onDelete(order.id)}
-          className="bg-red-500 text-white px-3 py-1 rounded text-xs md:text-base hover:bg-red-700 transition"
-        >
-          Supprimer
-        </button>
-      </td>
-    </tr>
-  );
-}
-
 function ProductList({ products }: { readonly products: ReadonlyArray<{ readonly name: string; readonly qty: number; readonly price: number }> }) {
   return (
     <ul className="list-disc ml-5 mt-1">
@@ -110,8 +66,8 @@ function AdminOrder() {
       o.id.toString().includes(search)
   );
 
-  // Changement de statut
-  const updateStatus = (id: number, status: Order["status"]) => {
+  // Changement de statut (utilisé dans les cards)
+  const handleStatusChange = (id: number, status: Order["status"]) => {
     setOrders((prev) =>
       prev.map((o) => (o.id === id ? { ...o, status } : o))
     );
@@ -134,31 +90,63 @@ function AdminOrder() {
           className="w-full md:w-72 px-4 py-2 rounded-lg border border-gray-300 focus:border-blue-500 focus:outline-none text-base"
         />
       </div>
-      <div className="overflow-x-auto">
-        <table className="w-full border-collapse bg-gray-50 rounded-lg text-sm md:text-base">
-          <thead>
-            <tr>
-              <th className="bg-blue-50 font-semibold p-3 text-left">N°</th>
-              <th className="bg-blue-50 font-semibold p-3 text-left">Client</th>
-              <th className="bg-blue-50 font-semibold p-3 text-left">Date</th>
-              <th className="bg-blue-50 font-semibold p-3 text-left">Statut</th>
-              <th className="bg-blue-50 font-semibold p-3 text-left">Total</th>
-              <th className="bg-blue-50 font-semibold p-3 text-left">Paiement</th>
-              <th className="bg-blue-50 font-semibold p-3 text-left">Actions</th>
-            </tr>
-          </thead>
-          <tbody>
-            {filteredOrders.map((o) => (
-              <OrderRow
-                key={o.id}
-                order={o}
-                onStatusChange={updateStatus}
-                onView={handleView}
-                onDelete={handleDelete}
-              />
-            ))}
-          </tbody>
-        </table>
+      {/* Cartes desktop et mobile */}
+      <div className="flex flex-col gap-4 mt-6">
+        {filteredOrders.length === 0 ? (
+          <div className="text-center p-4 bg-white rounded shadow">Aucune commande trouvée.</div>
+        ) : (
+          filteredOrders.map((o) => (
+            <div key={o.id} className="bg-white rounded-lg shadow p-4 flex flex-col gap-2 border border-gray-200">
+              <div className="font-semibold text-base mb-1">Commande n°{o.id}</div>
+              <div className="text-sm text-gray-600 mb-1">Client : <span className="font-medium">{o.client}</span></div>
+              <div className="text-sm text-gray-600 mb-1">Date : <span className="font-medium">{o.date}</span></div>
+              <div className="text-sm text-gray-600 mb-1 flex items-center gap-2">
+                Statut :
+                <select
+                  value={o.status}
+                  onChange={e => handleStatusChange(o.id, e.target.value as Order["status"])}
+                  className="rounded border border-gray-300 px-2 py-1 text-xs md:text-base font-medium capitalize"
+                >
+                  <option value="en attente">En attente</option>
+                  <option value="expédiée">Expédiée</option>
+                  <option value="livrée">Livrée</option>
+                  <option value="annulée">Annulée</option>
+                </select>
+              </div>
+              <div className="text-sm text-gray-600 mb-1">Total : <span className="font-medium">{o.total.toFixed(2)} €</span></div>
+              <div className="text-sm text-gray-600 mb-1">Paiement : <span className="font-medium">{o.payment}</span></div>
+              <div className="text-sm text-gray-600 mb-1">Adresse : <span className="font-medium">{o.address}</span></div>
+              <div className="text-sm mb-1">
+                Produits :
+                <ul className="list-disc ml-5 mt-1">
+                  {o.products.map((p, idx) => (
+                    <li key={idx} className="text-sm">
+                      {p.name} × {p.qty} — {(p.price * p.qty).toFixed(2)} €
+                    </li>
+                  ))}
+                </ul>
+              </div>
+              <div className="flex gap-2 mt-2">
+                <button
+                  onClick={() => handleView(o)}
+                  title="Voir"
+                  className="p-2 rounded-full hover:bg-blue-100 transition"
+                  style={{ color: '#2563eb', background: '#fff' }}
+                >
+                  Voir
+                </button>
+                <button
+                  onClick={() => handleDelete(o.id)}
+                  title="Supprimer"
+                  className="p-2 rounded-full hover:bg-red-100 transition"
+                  style={{ color: '#e3342f', background: '#fff' }}
+                >
+                  Supprimer
+                </button>
+              </div>
+            </div>
+          ))
+        )}
       </div>
       {/* Modal détail commande */}
       {selectedOrder && (

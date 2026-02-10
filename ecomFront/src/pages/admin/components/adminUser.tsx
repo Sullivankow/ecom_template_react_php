@@ -1,4 +1,3 @@
-
 import { useState } from "react";
 import { FaTrash, FaEye } from "react-icons/fa";
 
@@ -41,60 +40,6 @@ const initialUsers: User[] = [
   },
 ];
 
-function UserRow({ user, onView, onDelete, onStatus, onRole }: {
-  readonly user: Readonly<User>;
-  readonly onView: (user: User) => void;
-  readonly onDelete: (id: number) => void;
-  readonly onStatus: (id: number, status: User["status"]) => void;
-  readonly onRole: (id: number, role: User["role"]) => void;
-}) {
-  return (
-    <tr className="border-b">
-      <td className="p-3">{user.name}</td>
-      <td className="p-3">{user.email}</td>
-      <td className="p-3">
-        <select
-          value={user.role}
-          onChange={e => onRole(user.id, e.target.value as User["role"])}
-          className="rounded border border-gray-300 px-2 py-1 text-xs md:text-base"
-        >
-          <option value="client">Client</option>
-          <option value="admin">Admin</option>
-        </select>
-      </td>
-      <td className="p-3">
-        <select
-          value={user.status}
-          onChange={e => onStatus(user.id, e.target.value as User["status"])}
-          className="rounded border border-gray-300 px-2 py-1 text-xs md:text-base"
-        >
-          <option value="actif">Actif</option>
-          <option value="suspendu">Suspendu</option>
-          <option value="banni">Banni</option>
-        </select>
-      </td>
-      <td className="p-3">{user.createdAt}</td>
-      <td className="p-3 flex gap-2 flex-wrap items-center">
-        <button
-          onClick={() => onView(user)}
-          title="Voir"
-          className="focus:outline-none hover:text-blue-700 transition"
-          style={{ background: "none", border: "none", padding: 0 }}
-        >
-          <FaEye className="text-blue-600 text-lg" />
-        </button>
-        <button
-          onClick={() => onDelete(user.id)}
-          title="Supprimer"
-          className="focus:outline-none hover:text-red-700 transition"
-          style={{ background: "none", border: "none", padding: 0 }}
-        >
-          <FaTrash className="text-red-500 text-lg" />
-        </button>
-      </td>
-    </tr>
-  );
-}
 
 function UserOrders({ orders }: { readonly orders: ReadonlyArray<{ readonly id: number; readonly date: string; readonly total: number; readonly status: string }> }) {
   if (!orders.length) return <div className="text-gray-400 text-sm">Aucune commande</div>;
@@ -152,32 +97,7 @@ function AdminUser() {
           className="w-full md:w-72 px-4 py-2 rounded-lg border border-gray-300 focus:border-blue-500 focus:outline-none text-base"
         />
       </div>
-      <div className="overflow-x-auto">
-        <table className="w-full border-collapse bg-gray-50 rounded-lg text-sm md:text-base">
-          <thead>
-            <tr>
-              <th className="bg-blue-50 font-semibold p-3 text-left">Nom</th>
-              <th className="bg-blue-50 font-semibold p-3 text-left">Email</th>
-              <th className="bg-blue-50 font-semibold p-3 text-left">Rôle</th>
-              <th className="bg-blue-50 font-semibold p-3 text-left">Statut</th>
-              <th className="bg-blue-50 font-semibold p-3 text-left">Inscription</th>
-              <th className="bg-blue-50 font-semibold p-3 text-left">Actions</th>
-            </tr>
-          </thead>
-          <tbody>
-            {filteredUsers.map((u) => (
-              <UserRow
-                key={u.id}
-                user={u}
-                onView={handleView}
-                onDelete={handleDelete}
-                onStatus={handleStatus}
-                onRole={handleRole}
-              />
-            ))}
-          </tbody>
-        </table>
-      </div>
+      {/* Suppression du tableau horizontal, affichage uniquement en cards */}
       {/* Modal détail utilisateur */}
       {selectedUser && (
         <div className="fixed inset-0 bg-black bg-opacity-40 flex items-center justify-center z-50">
@@ -204,6 +124,76 @@ function AdminUser() {
           </div>
         </div>
       )}
+      {/* Suppression de l'ancien tableau utilisateur */}
+      {/* Cartes desktop et mobile */}
+      <div className="flex flex-col gap-4 mt-6">
+        {filteredUsers.length === 0 ? (
+          <div className="text-center p-4 bg-white rounded shadow">Aucun utilisateur trouvé.</div>
+        ) : (
+          filteredUsers.map((u) => (
+            <div key={u.id} className="bg-white rounded-lg shadow p-4 flex flex-col gap-2 border border-gray-200">
+              <div className="font-semibold text-base mb-1">{u.name}</div>
+              <div className="text-sm text-gray-600 mb-1">Email : <span className="font-medium">{u.email}</span></div>
+              <div className="text-sm text-gray-600 mb-1">
+                Rôle :
+                <select
+                  value={u.role}
+                  onChange={e => handleRole(u.id, e.target.value as User["role"])}
+                  className="rounded border border-gray-300 px-2 py-1 text-xs md:text-base ml-2"
+                >
+                  <option value="client">Client</option>
+                  <option value="admin">Admin</option>
+                </select>
+              </div>
+              <div className="text-sm text-gray-600 mb-1">
+                Statut :
+                <select
+                  value={u.status}
+                  onChange={e => handleStatus(u.id, e.target.value as User["status"])}
+                  className="rounded border border-gray-300 px-2 py-1 text-xs md:text-base ml-2"
+                >
+                  <option value="actif">Actif</option>
+                  <option value="suspendu">Suspendu</option>
+                  <option value="banni">Banni</option>
+                </select>
+              </div>
+              <div className="text-sm text-gray-600 mb-1">Inscription : <span className="font-medium">{new Date(u.createdAt).toLocaleDateString('fr-FR')}</span></div>
+              <div className="text-sm mb-1">
+                Commandes :
+                <ul className="list-disc ml-5 mt-1">
+                  {u.orders.length === 0 ? (
+                    <li className="text-gray-400 text-sm">Aucune commande</li>
+                  ) : (
+                    u.orders.map((o, idx) => (
+                      <li key={idx} className="text-sm">
+                        n°{o.id} — {o.date} — {o.total.toFixed(2)} € — {o.status}
+                      </li>
+                    ))
+                  )}
+                </ul>
+              </div>
+              <div className="flex gap-2 mt-2">
+                <button
+                  onClick={() => handleView(u)}
+                  title="Voir"
+                  className="p-2 rounded-full hover:bg-blue-100 transition"
+                  style={{ color: '#2563eb', background: '#fff' }}
+                >
+                  <FaEye size={18} />
+                </button>
+                <button
+                  onClick={() => handleDelete(u.id)}
+                  title="Supprimer"
+                  className="p-2 rounded-full hover:bg-red-100 transition"
+                  style={{ color: '#e3342f', background: '#fff' }}
+                >
+                  <FaTrash size={18} />
+                </button>
+              </div>
+            </div>
+          ))
+        )}
+      </div>
     </div>
   );
 }

@@ -86,72 +86,84 @@ const AdminReviews: React.FC = () => {
 
 
   // Filtrage des avis selon la recherche et le statut
+  const matchStatus = (r: Review) => {
+    if (statusFilter === 'all') return true;
+    return r.status === statusFilter;
+  };
   const filteredReviews = reviews.filter(r => {
-    const matchStatus = statusFilter === 'all' || r.status === statusFilter;
+    const statusOk = matchStatus(r);
     const matchSearch =
       r.user.toLowerCase().includes(search.toLowerCase()) ||
       r.product.toLowerCase().includes(search.toLowerCase()) ||
       r.comment.toLowerCase().includes(search.toLowerCase());
-    return matchStatus && matchSearch;
+    return statusOk && matchSearch;
   });
 
-  // Préparation du contenu du tableau selon l'état (chargement, vide, ou liste)
-  let tableContent;
-  if (loading) {
-    tableContent = (
-      <tr><td colSpan={7} className="text-center py-8">Chargement...</td></tr>
+
+  // Rendu du contenu des avis
+  const renderReviewsList = () => {
+    if (loading) {
+      return <div className="text-center p-4 bg-white rounded shadow">Chargement...</div>;
+    }
+
+    if (filteredReviews.length === 0) {
+      return <div className="text-center p-4 bg-white rounded shadow">Aucun avis trouvé.</div>;
+    }
+
+    return (
+      <>
+        {filteredReviews.map(r => {
+          let statusLabel = null;
+          if (r.status === 'published') {
+            statusLabel = <span className="text-green-600 font-semibold ml-2">Publié</span>;
+          } else if (r.status === 'pending') {
+            statusLabel = <span className="text-yellow-600 font-semibold ml-2">En attente</span>;
+          } else if (r.status === 'deleted') {
+            statusLabel = <span className="text-red-500 font-semibold ml-2">Supprimé</span>;
+          }
+          return (
+            <div key={r.id} className="bg-white rounded-lg shadow p-4 flex flex-col gap-2 border border-gray-200">
+              <div className="flex justify-between items-center mb-1">
+                <span className="font-semibold text-base">{r.user}</span>
+                <span className="text-xs font-medium text-gray-500">{r.product}</span>
+              </div>
+              <div className="flex items-center gap-2 mb-1">
+                <span className="text-yellow-500 font-bold">{'★'.repeat(r.rating)}{'☆'.repeat(5 - r.rating)}</span>
+                <span className="text-xs text-gray-400">{r.date}</span>
+              </div>
+              <div className="text-sm text-gray-600 mb-1">Commentaire : <span className="font-medium" title={r.comment}>{r.comment}</span></div>
+              <div className="text-sm text-gray-600 mb-1">
+                Statut :
+                {statusLabel}
+              </div>
+              <div className="flex gap-2 mt-2">
+                {/* Bouton publier (si pas déjà publié ou supprimé) */}
+                {r.status !== 'published' && r.status !== 'deleted' && (
+                  <button title="Publier" className="p-2 rounded-full hover:bg-green-100 transition" style={{ color: '#059669', background: '#fff' }} onClick={() => handlePublish(r.id)}>
+                    <FaEye size={18} />
+                  </button>
+                )}
+                {/* Bouton masquer (si publié) */}
+                {r.status === 'published' && (
+                  <button title="Masquer" className="p-2 rounded-full hover:bg-yellow-100 transition" style={{ color: '#eab308', background: '#fff' }} onClick={() => handleHide(r.id)}>
+                    <FaEyeSlash size={18} />
+                  </button>
+                )}
+                {/* Bouton supprimer (si pas déjà supprimé) */}
+                {r.status !== 'deleted' && (
+                  <button title="Supprimer" className="p-2 rounded-full hover:bg-red-100 transition" style={{ color: '#e3342f', background: '#fff' }} onClick={() => handleDelete(r.id)}>
+                    <FaTrash size={18} />
+                  </button>
+                )}
+              </div>
+            </div>
+          );
+        })}
+      </>
     );
-  } else if (filteredReviews.length === 0) {
-    tableContent = (
-      <tr><td colSpan={7} className="text-center py-8">Aucun avis trouvé.</td></tr>
-    );
-  } else {
-    tableContent = filteredReviews.map(r => (
-      <tr key={r.id} className="border-t hover:bg-gray-50 transition">
-        {/* Utilisateur */}
-        <td className="p-2 md:p-3 font-medium">{r.user}</td>
-        {/* Produit concerné */}
-        <td className="p-2 md:p-3">{r.product}</td>
-        {/* Note sous forme d'étoiles */}
-        <td className="p-2 md:p-3">
-          <span className="inline-block text-yellow-500 font-bold">
-            {'★'.repeat(r.rating)}{'☆'.repeat(5 - r.rating)}
-          </span>
-        </td>
-        {/* Commentaire (tronqué si trop long) */}
-        <td className="p-2 md:p-3 max-w-xs truncate" title={r.comment}>{r.comment}</td>
-        {/* Date de l'avis */}
-        <td className="p-2 md:p-3 whitespace-nowrap">{r.date}</td>
-        {/* Statut de l'avis */}
-        <td className="p-2 md:p-3">
-          {r.status === 'published' && <span className="text-green-600 font-semibold">Publié</span>}
-          {r.status === 'pending' && <span className="text-yellow-600 font-semibold">En attente</span>}
-          {r.status === 'deleted' && <span className="text-red-500 font-semibold">Supprimé</span>}
-        </td>
-        {/* Actions d'administration */}
-        <td className="p-2 md:p-3 flex gap-2 justify-center">
-          {/* Bouton publier (si pas déjà publié ou supprimé) */}
-          {r.status !== 'published' && r.status !== 'deleted' && (
-            <button title="Publier" className="p-2 rounded hover:bg-gray-100" style={{background: 'none', border: 'none'}} onClick={() => handlePublish(r.id)}>
-              <FaEye className="text-green-700" />
-            </button>
-          )}
-          {/* Bouton masquer (si publié) */}
-          {r.status === 'published' && (
-            <button title="Masquer" className="p-2 rounded hover:bg-gray-100" style={{background: 'none', border: 'none'}} onClick={() => handleHide(r.id)}>
-              <FaEyeSlash className="text-yellow-700" />
-            </button>
-          )}
-          {/* Bouton supprimer (si pas déjà supprimé) */}
-          {r.status !== 'deleted' && (
-            <button title="Supprimer" className="p-2 rounded hover:bg-gray-100" style={{background: 'none', border: 'none'}} onClick={() => handleDelete(r.id)}>
-              <FaTrash className="text-red-700" />
-            </button>
-          )}
-        </td>
-      </tr>
-    ));
-  }
+  };
+
+  const reviewsContent = renderReviewsList();
 
   return (
     <div className="p-4 md:p-8 max-w-5xl mx-auto w-full">
@@ -184,25 +196,9 @@ const AdminReviews: React.FC = () => {
         </select>
       </div>
 
-      {/* Tableau responsive des avis */}
-      <div className="overflow-x-auto rounded-lg shadow border bg-white">
-        <table className="min-w-full text-sm md:text-base">
-          <thead className="bg-gray-100">
-            <tr>
-              <th className="p-2 md:p-3 text-left">Utilisateur</th>
-              <th className="p-2 md:p-3 text-left">Produit</th>
-              <th className="p-2 md:p-3 text-left">Note</th>
-              <th className="p-2 md:p-3 text-left">Commentaire</th>
-              <th className="p-2 md:p-3 text-left">Date</th>
-              <th className="p-2 md:p-3 text-left">Statut</th>
-              <th className="p-2 md:p-3 text-center">Actions</th>
-            </tr>
-          </thead>
-          <tbody>
-            {/* Affichage du loader, du message vide, ou de la liste des avis */}
-            {tableContent}
-          </tbody>
-        </table>
+      {/* Cards responsive pour les avis */}
+      <div className="flex flex-col gap-4 mt-6">
+        {reviewsContent}
       </div>
     </div>
   );
