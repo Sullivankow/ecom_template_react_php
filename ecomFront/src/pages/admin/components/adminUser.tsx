@@ -1,5 +1,5 @@
 import { useState } from "react";
-import { FaTrash, FaEye } from "react-icons/fa";
+import { FaTrash, FaEye, FaEdit } from "react-icons/fa";
 
 type User = {
   id: number;
@@ -71,6 +71,23 @@ function AdminUser() {
   const [users, setUsers] = useState<User[]>(initialUsers);
   const [search, setSearch] = useState("");
   const [selectedUser, setSelectedUser] = useState<User | null>(null);
+  const [editUser, setEditUser] = useState<User | null>(null);
+  const [editForm, setEditForm] = useState({ name: "", email: "", role: "client" as User["role"], status: "actif" as User["status"] });
+  // Préparer le formulaire d'édition
+  const handleEdit = (user: User) => {
+    setEditUser(user);
+    setEditForm({ name: user.name, email: user.email, role: user.role, status: user.status });
+  };
+  const handleEditChange = (e: React.ChangeEvent<HTMLInputElement | HTMLSelectElement>) => {
+    const { name, value } = e.target;
+    setEditForm(prev => ({ ...prev, [name]: value }));
+  };
+  const handleEditSubmit = (e: React.FormEvent) => {
+    e.preventDefault();
+    if (!editUser) return;
+    setUsers(prev => prev.map(u => u.id === editUser.id ? { ...u, ...editForm } : u));
+    setEditUser(null);
+  };
 
   const filteredUsers = users.filter(
     (u) =>
@@ -182,6 +199,14 @@ function AdminUser() {
                   <FaEye size={18} />
                 </button>
                 <button
+                  onClick={() => handleEdit(u)}
+                  title="Modifier"
+                  className="p-2 rounded-full hover:bg-yellow-100 transition"
+                  style={{ color: '#eab308', background: '#fff' }}
+                >
+                  <FaEdit size={18} />
+                </button>
+                <button
                   onClick={() => handleDelete(u.id)}
                   title="Supprimer"
                   className="p-2 rounded-full hover:bg-red-100 transition"
@@ -190,6 +215,79 @@ function AdminUser() {
                   <FaTrash size={18} />
                 </button>
               </div>
+                  {/* Modal édition utilisateur */}
+                  {editUser && (
+                    <div className="fixed inset-0 bg-black bg-opacity-40 flex items-center justify-center z-50">
+                      <div className="bg-white rounded-xl shadow-lg p-6 w-full max-w-md mx-2 relative">
+                        <button
+                          onClick={() => setEditUser(null)}
+                          className="absolute top-2 right-2 text-3xl focus:outline-none"
+                          style={{ background: "none", border: "none", color: "#111", padding: 0 }}
+                          title="Fermer"
+                        >
+                          ×
+                        </button>
+                        <h3 className="text-lg font-bold mb-4">Modifier utilisateur</h3>
+                        <form onSubmit={handleEditSubmit} className="flex flex-col gap-4">
+                          <label htmlFor="edit-name" className="text-sm font-medium">Nom :</label>
+                          <input
+                            id="edit-name"
+                            name="name"
+                            type="text"
+                            value={editForm.name}
+                            onChange={handleEditChange}
+                            placeholder="Nom"
+                            className="border border-gray-300 rounded px-3 py-2 text-base"
+                            required
+                          />
+                          <label htmlFor="edit-email" className="text-sm font-medium">Email :</label>
+                          <input
+                            id="edit-email"
+                            name="email"
+                            type="email"
+                            value={editForm.email}
+                            onChange={handleEditChange}
+                            placeholder="Email"
+                            className="border border-gray-300 rounded px-3 py-2 text-base"
+                            required
+                          />
+                          <div className="flex gap-2 items-center">
+                            <label htmlFor="edit-role" className="text-sm font-medium">Rôle :</label>
+                            <select
+                              id="edit-role"
+                              name="role"
+                              value={editForm.role}
+                              onChange={handleEditChange}
+                              className="rounded border border-gray-300 px-2 py-1 text-base"
+                            >
+                              <option value="client">Client</option>
+                              <option value="admin">Admin</option>
+                            </select>
+                          </div>
+                          <div className="flex gap-2 items-center">
+                            <label htmlFor="edit-status" className="text-sm font-medium">Statut :</label>
+                            <select
+                              id="edit-status"
+                              name="status"
+                              value={editForm.status}
+                              onChange={handleEditChange}
+                              className="rounded border border-gray-300 px-2 py-1 text-base"
+                            >
+                              <option value="actif">Actif</option>
+                              <option value="suspendu">Suspendu</option>
+                              <option value="banni">Banni</option>
+                            </select>
+                          </div>
+                          <button
+                            type="submit"
+                            className="bg-blue-600 text-white px-4 py-2 rounded font-semibold hover:bg-blue-700 transition"
+                          >
+                            Enregistrer
+                          </button>
+                        </form>
+                      </div>
+                    </div>
+                  )}
             </div>
           ))
         )}
