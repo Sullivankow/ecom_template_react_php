@@ -1,4 +1,3 @@
-
 import { useState } from "react";
 import { FaTrash, FaToggleOn, FaToggleOff } from "react-icons/fa";
 
@@ -194,63 +193,51 @@ function AdminPromotion() {
         </form>
       )}
 
-      {/* Tableau des promotions */}
-      <div className="overflow-x-auto">
-        <table className="w-full border-collapse bg-gray-50 rounded-lg">
-          <thead>
-            <tr>
-              <th className="bg-blue-50 font-semibold p-3 text-left">Nom</th>
-              <th className="bg-blue-50 font-semibold p-3 text-left">Type</th>
-              <th className="bg-blue-50 font-semibold p-3 text-left">Valeur</th>
-              <th className="bg-blue-50 font-semibold p-3 text-left">Période</th>
-              <th className="bg-blue-50 font-semibold p-3 text-left">Produits/Catégories</th>
-              <th className="bg-blue-50 font-semibold p-3 text-left">Statut</th>
-              <th className="bg-blue-50 font-semibold p-3 text-left">Actions</th>
-            </tr>
-          </thead>
-          <tbody>
-            {filteredPromos.map((p) => (
-              <tr key={p.id} className="border-b">
-                <td className="p-3">{p.nom}</td>
-                <td className="p-3 capitalize">{p.type}</td>
-                <td className="p-3">
-                  {p.type === "pourcentage" && `${p.valeur} %`}
-                  {p.type === "montant" && `${p.valeur} €`}
-                  {p.type === "livraison" && "Offerte"}
-                </td>
-                <td className="p-3">{p.dateDebut} → {p.dateFin}</td>
-                <td className="p-3 text-sm">{p.produits.join(", ")}</td>
-                <td className="p-3">
-                  <span className={p.actif ? "text-green-600 font-semibold" : "text-gray-400 font-semibold"}>
-                    {p.actif ? "Actif" : "Inactif"}
-                  </span>
-                </td>
-                <td className="p-3 flex gap-3 flex-wrap items-center">
-                  {/* Icône switch pour activer/désactiver */}
-                  <button
-                    onClick={() => toggleActive(p.id)}
-                    title={p.actif ? "Désactiver" : "Activer"}
-                    className="focus:outline-none"
-                  >
-                    {p.actif ? (
-                      <FaToggleOn className="text-2xl text-green-500 hover:text-green-700 transition" />
-                    ) : (
-                      <FaToggleOff className="text-2xl text-gray-400 hover:text-green-500 transition" />
-                    )}
-                  </button>
-                  {/* Icône corbeille rouge pour supprimer */}
-                  <button
-                    onClick={() => deletePromo(p.id)}
-                    title="Supprimer"
-                    className="focus:outline-none"
-                  >
-                    <FaTrash className="text-2xl text-red-500 hover:text-red-700 transition" />
-                  </button>
-                </td>
-              </tr>
-            ))}
-          </tbody>
-        </table>
+      {/* Cartes desktop et mobile */}
+      <div className="flex flex-col gap-4 mt-6">
+        {filteredPromos.length === 0 ? (
+          <div className="text-center p-4 bg-white rounded shadow">Aucune promotion trouvée.</div>
+        ) : (
+          filteredPromos.map((p) => (
+            <div key={p.id} className="bg-white rounded-lg shadow p-4 flex flex-col gap-2 border border-gray-200">
+              <div className="font-semibold text-base mb-1">{p.nom}</div>
+              <div className="text-sm text-gray-600 mb-1">{p.description}</div>
+              <div className="text-sm text-gray-600 mb-1">Type : <span className="font-medium capitalize">{p.type}</span></div>
+              <div className="text-sm text-gray-600 mb-1">Valeur : <span className="font-medium">
+                {p.type === "pourcentage" && `${p.valeur} %`}
+                {p.type === "montant" && `${p.valeur} €`}
+                {p.type === "livraison" && "Offerte"}
+              </span></div>
+              <div className="text-sm text-gray-600 mb-1">Période : {p.dateDebut} → {p.dateFin}</div>
+              <div className="text-sm text-gray-600 mb-1">Produits/Catégories : <span className="font-medium">{p.produits.join(", ")}</span></div>
+              <div className="text-sm mb-1">
+                Statut : <span className={p.actif ? "text-green-600 font-semibold" : "text-gray-400 font-semibold"}>{p.actif ? "Actif" : "Inactif"}</span>
+              </div>
+              <div className="flex gap-2 mt-2">
+                <button
+                  onClick={() => toggleActive(p.id)}
+                  title={p.actif ? "Désactiver" : "Activer"}
+                  className="p-2 rounded-full hover:bg-green-100 transition"
+                  style={{ background: '#fff' }}
+                >
+                  {p.actif ? (
+                    <FaToggleOn style={{ color: '#22c55e' }} size={18} />
+                  ) : (
+                    <FaToggleOff style={{ color: '#cbd5e1' }} size={18} />
+                  )}
+                </button>
+                <button
+                  onClick={() => deletePromo(p.id)}
+                  title="Supprimer"
+                  className="p-2 rounded-full hover:bg-red-100 transition"
+                  style={{ color: '#e3342f', background: '#fff' }}
+                >
+                  <FaTrash size={18} />
+                </button>
+              </div>
+            </div>
+          ))
+        )}
       </div>
     </div>
   );
