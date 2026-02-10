@@ -30,6 +30,7 @@ import AdminUser from './pages/admin/components/adminUser';
 import AdminMessage from './pages/admin/components/adminMessage';
 import AdminReviews from './pages/admin/components/adminReviews';
 import AdminContent from './pages/admin/components/adminContent';
+import AdminFaq from './pages/admin/components/adminFaq';
 
 
 import AdminPage from './pages/admin/adminPage';
@@ -124,7 +125,7 @@ function App() {
           <Route path="support" element={<AdminMessage />} />
           <Route path="reviews" element={<AdminReviews />} />
           <Route path="logs" element={<AdminContent />} />
-          <Route path="faq" element={<div>FAQ</div>} />
+          <Route path="faq" element={<AdminFaq />} />
           <Route path="settings" element={<div>Paramètres</div>} />
         </Route>
       </Routes>
