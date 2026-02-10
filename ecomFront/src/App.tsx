@@ -29,6 +29,7 @@ import AdminOrder from './pages/admin/components/adminOrder';
 import AdminUser from './pages/admin/components/adminUser';
 import AdminMessage from './pages/admin/components/adminMessage';
 import AdminReviews from './pages/admin/components/adminReviews';
+import AdminContent from './pages/admin/components/adminContent';
 
 
 import AdminPage from './pages/admin/adminPage';
@@ -122,7 +123,7 @@ function App() {
           <Route path="users" element={<AdminUser />} />
           <Route path="support" element={<AdminMessage />} />
           <Route path="reviews" element={<AdminReviews />} />
-          <Route path="logs" element={<div>Journal d'activité</div>} />
+          <Route path="logs" element={<AdminContent />} />
           <Route path="faq" element={<div>FAQ</div>} />
           <Route path="settings" element={<div>Paramètres</div>} />
         </Route>
