@@ -47,6 +47,9 @@ class RegisterController extends AbstractController
     ): JsonResponse {
         $data = json_decode($request->getContent(), true);
         $email = filter_var($data['email'], FILTER_SANITIZE_EMAIL);
+if (!filter_var($email, FILTER_VALIDATE_EMAIL)) {
+    return $this->json(['error' => 'Email invalide'], 400);
+}
         $error = null;
 
         // Vérification des champs obligatoires
