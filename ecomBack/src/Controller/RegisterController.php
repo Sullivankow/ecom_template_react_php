@@ -82,6 +82,8 @@ if (!filter_var($email, FILTER_VALIDATE_EMAIL)) {
         $user->setFirstName($data['firstName']);
         $user->setLastName($data['lastName']);
         $user->setEmail($email);
+        // Attribuer automatiquement le rôle USER
+        $user->setRoles(['ROLE_USER']);
         $hashedPassword = $passwordHasher->hashPassword($user, $data['password']);
         $user->setPassword($hashedPassword);
 
