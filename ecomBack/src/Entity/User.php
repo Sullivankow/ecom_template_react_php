@@ -1,109 +1,177 @@
 <?php
+        namespace App\Entity;
 
-namespace App\Entity;
+        use App\Repository\UserRepository;
+        use Doctrine\ORM\Mapping as ORM;
+        use Symfony\Component\Security\Core\User\PasswordAuthenticatedUserInterface;
+        use Symfony\Component\Security\Core\User\UserInterface;
 
-use App\Repository\UserRepository;
-use Doctrine\ORM\Mapping as ORM;
-use Symfony\Component\Security\Core\User\PasswordAuthenticatedUserInterface;
-use Symfony\Component\Security\Core\User\UserInterface;
+        /**
+         * Entité représentant un utilisateur de l'application.
+         * Contient les informations d'identité, d'authentification et de rôle.
+         */
+        #[ORM\Entity(repositoryClass: UserRepository::class)]
+        #[ORM\Table(name: '`user`')]
+        #[ORM\UniqueConstraint(name: 'UNIQ_IDENTIFIER_EMAIL', fields: ['email'])]
+        class User implements UserInterface, PasswordAuthenticatedUserInterface
+        {
+            /**
+             * Identifiant unique (clé primaire)
+             */
+            #[ORM\Id]
+            #[ORM\GeneratedValue]
+            #[ORM\Column]
+            private ?int $id = null;
 
-#[ORM\Entity(repositoryClass: UserRepository::class)]
-#[ORM\Table(name: '`user`')]
-#[ORM\UniqueConstraint(name: 'UNIQ_IDENTIFIER_EMAIL', fields: ['email'])]
-class User implements UserInterface, PasswordAuthenticatedUserInterface
-{
-    #[ORM\Id]
-    #[ORM\GeneratedValue]
-    #[ORM\Column]
-    private ?int $id = null;
+            /**
+             * Prénom de l'utilisateur
+             */
+            #[ORM\Column(length: 100)]
+            private ?string $firstName = null;
 
-    #[ORM\Column(length: 180)]
-    private ?string $email = null;
+            /**
+             * Nom de famille de l'utilisateur
+             */
+            #[ORM\Column(length: 100)]
+            private ?string $lastName = null;
 
-    /**
-     * @var list<string> The user roles
-     */
-    #[ORM\Column]
-    private array $roles = [];
+            /**
+             * Adresse email (unique)
+             */
+            #[ORM\Column(length: 180)]
+            private ?string $email = null;
 
-    /**
-     * @var string The hashed password
-     */
-    #[ORM\Column]
-    private ?string $password = null;
+            /**
+             * Rôles de l'utilisateur (ex : ROLE_USER, ROLE_ADMIN)
+             */
+            #[ORM\Column]
+            private array $roles = [];
 
-    public function getId(): ?int
-    {
-        return $this->id;
-    }
+            /**
+             * Mot de passe hashé
+             */
+            #[ORM\Column]
+            private ?string $password = null;
 
-    public function getEmail(): ?string
-    {
-        return $this->email;
-    }
+ /**
+             * GETTER ET SETTER
+             */
 
-    public function setEmail(string $email): static
-    {
-        $this->email = $email;
 
-        return $this;
-    }
 
-    /**
-     * A visual identifier that represents this user.
-     *
-     * @see UserInterface
-     */
-    public function getUserIdentifier(): string
-    {
-        return (string) $this->email;
-    }
 
-    /**
-     * @see UserInterface
-     */
-    public function getRoles(): array
-    {
-        $roles = $this->roles;
-        // guarantee every user at least has ROLE_USER
-        $roles[] = 'ROLE_USER';
+            /**
+             * Retourne l'identifiant unique de l'utilisateur
+             */
+            public function getId(): ?int
+            {
+                return $this->id;
+            }
 
-        return array_unique($roles);
-    }
+            /**
+             * Retourne le prénom de l'utilisateur
+             */
+            public function getFirstName(): ?string
+            {
+                return $this->firstName;
+            }
 
-    /**
-     * @param list<string> $roles
-     */
-    public function setRoles(array $roles): static
-    {
-        $this->roles = $roles;
+            /**
+             * Définit le prénom de l'utilisateur
+             */
+            public function setFirstName(string $firstName): static
+            {
+                $this->firstName = $firstName;
+                return $this;
+            }
 
-        return $this;
-    }
+            /**
+             * Retourne le nom de famille de l'utilisateur
+             */
+            public function getLastName(): ?string
+            {
+                return $this->lastName;
+            }
 
-    /**
-     * @see PasswordAuthenticatedUserInterface
-     */
-    public function getPassword(): ?string
-    {
-        return $this->password;
-    }
+            /**
+             * Définit le nom de famille de l'utilisateur
+             */
+            public function setLastName(string $lastName): static
+            {
+                $this->lastName = $lastName;
+                return $this;
+            }
 
-    public function setPassword(string $password): static
-    {
-        $this->password = $password;
+            /**
+             * Retourne l'adresse email de l'utilisateur
+             */
+            public function getEmail(): ?string
+            {
+                return $this->email;
+            }
 
-        return $this;
-    }
+            /**
+             * Définit l'adresse email de l'utilisateur
+             */
+            public function setEmail(string $email): static
+            {
+                $this->email = $email;
+                return $this;
+            }
 
-    /**
-     * Ensure the session doesn't contain actual password hashes by CRC32C-hashing them, as supported since Symfony 7.3.
-     */
-    public function __serialize(): array
-    {
-        $data = (array) $this;
-        $data["\0".self::class."\0password"] = hash('crc32c', $this->password);
+            /**
+             * Identifiant visuel de l'utilisateur (utilisé par Symfony)
+             */
+            public function getUserIdentifier(): string
+            {
+                return (string) $this->email;
+            }
 
-        return $data;
-    }
-}
+            /**
+             * Retourne la liste des rôles de l'utilisateur
+             */
+            public function getRoles(): array
+            {
+                $roles = $this->roles;
+                // Ajoute toujours le rôle de base
+                $roles[] = 'ROLE_USER';
+                return array_unique($roles);
+            }
+
+            /**
+             * Définit la liste des rôles de l'utilisateur
+             */
+            public function setRoles(array $roles): static
+            {
+                $this->roles = $roles;
+                return $this;
+            }
+
+            /**
+             * Retourne le mot de passe hashé
+             */
+            public function getPassword(): ?string
+            {
+                return $this->password;
+            }
+
+            /**
+             * Définit le mot de passe hashé
+             */
+            public function setPassword(string $password): static
+            {
+                $this->password = $password;
+                return $this;
+            }
+
+            /**
+             * Pour la sécurité : ne jamais stocker le hash du mot de passe en session (Symfony >= 7.3)
+             */
+            public function __serialize(): array
+            {
+                $data = (array) $this;
+                $data["\0".self::class."\0password"] = hash('crc32c', $this->password);
+                return $data;
+            }
+        }
+
