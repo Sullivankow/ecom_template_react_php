@@ -13,6 +13,7 @@ use OpenApi\Attributes as OA;
 
 class RegisterController extends AbstractController
 {
+    // Route pour l'inscription d'un nouvel utilisateur
     #[Route('/register', name: 'api_register', methods: ['POST'])]
     #[OA\Post(
         path: "/api/register",
@@ -35,12 +36,17 @@ class RegisterController extends AbstractController
             new OA\Response(response: 400, description: "Erreur de validation"),
         ]
     )]
+
+
+
+
     public function register(
         Request $request,
         EntityManagerInterface $em,
         UserPasswordHasherInterface $passwordHasher
     ): JsonResponse {
         $data = json_decode($request->getContent(), true);
+        $email = filter_var($data['email'], FILTER_SANITIZE_EMAIL);
         $error = null;
 
         // Vérification des champs obligatoires
@@ -59,10 +65,10 @@ class RegisterController extends AbstractController
             $error = 'Le mot de passe doit contenir au moins 8 caractères, une majuscule, une minuscule, un chiffre et un caractère spécial.';
         }
 
-        // Vérification email déjà existant (si pas d'erreur précédente)
-        if (!$error && $em->getRepository(User::class)->findOneBy(['email' => $data['email']])) {
-            $error = 'Cet email existe déjà';
-        }
+        // Vérification email déjà existant et échapper les caractères (si pas d'erreur précédente)
+       if (!$error && $em->getRepository(User::class)->findOneBy(['email' => $email])) {
+    $error = 'Cet email existe déjà';
+}
 
         if ($error) {
             return $this->json(['error' => $error], 400);
@@ -72,7 +78,7 @@ class RegisterController extends AbstractController
         $user = new User();
         $user->setFirstName($data['firstName']);
         $user->setLastName($data['lastName']);
-        $user->setEmail($data['email']);
+        $user->setEmail($email);
         $hashedPassword = $passwordHasher->hashPassword($user, $data['password']);
         $user->setPassword($hashedPassword);
 
