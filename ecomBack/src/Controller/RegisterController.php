@@ -2,14 +2,17 @@
 
 namespace App\Controller;
 
+
 use App\Entity\User;
 use Doctrine\ORM\EntityManagerInterface;
+use Symfony\Component\Security\Http\Attribute\IsGranted;
 use Symfony\Component\HttpFoundation\JsonResponse;
 use Symfony\Component\HttpFoundation\Request;
 use Symfony\Component\PasswordHasher\Hasher\UserPasswordHasherInterface;
 use Symfony\Component\Routing\Attribute\Route;
 use Symfony\Bundle\FrameworkBundle\Controller\AbstractController;
 use OpenApi\Attributes as OA;
+
 
 class RegisterController extends AbstractController
 {
@@ -92,6 +95,117 @@ if (!filter_var($email, FILTER_VALIDATE_EMAIL)) {
 
         return $this->json(['message' => 'Utilisateur créé avec succès'], 201);
     }
+
+
+
+// Route pour remplacer toutes les infos de l'utilisateur (PUT)
+#[Route('/users/{id}', name: 'user_update', methods: ['PUT'])]
+#[IsGranted('IS_AUTHENTICATED_FULLY')]
+#[OA\Put(
+    path: "/api/users/{id}",
+    summary: "Modifier totalement un utilisateur (nom, prénom, email)",
+    tags: ["Utilisateur"],
+    parameters: [
+        new OA\Parameter(name: "id", in: "path", required: true, schema: new OA\Schema(type: "integer"))
+    ],
+    requestBody: new OA\RequestBody(
+        required: true,
+        content: new OA\JsonContent(
+            required: ["firstName", "lastName", "email"],
+            properties: [
+                new OA\Property(property: "firstName", type: "string"),
+                new OA\Property(property: "lastName", type: "string"),
+                new OA\Property(property: "email", type: "string", format: "email")
+            ]
+        )
+    ),
+    responses: [
+        new OA\Response(response: 200, description: "Utilisateur mis à jour"),
+        new OA\Response(response: 400, description: "Erreur de validation")
+    ]
+)]
+
+public function updateUser(
+    Request $request,
+    User $user,
+    EntityManagerInterface $em,
+    
+): JsonResponse {
+    $data = json_decode($request->getContent(), true);
+    $error = null;
+
+    // Vérification des champs obligatoires
+    if (
+        empty($data['firstName']) ||
+        empty($data['lastName']) ||
+        empty($data['email'])
+    ) {
+        $error = 'Champs manquants';
+    }
+
+    // Vérification email
+    $email = filter_var($data['email'] ?? '', FILTER_SANITIZE_EMAIL);
+    if (!$error && !filter_var($email, FILTER_VALIDATE_EMAIL)) {
+        $error = 'Email invalide';
+    }
+
+    // Vérification email déjà existant (hors utilisateur courant)
+    $existingUser = $em->getRepository(User::class)->findOneBy(['email' => $email]);
+    if (!$error && $existingUser && $existingUser->getId() !== $user->getId()) {
+        $error = 'Cet email existe déjà';
+    }
+
+    if ($error) {
+        return $this->json(['error' => $error], 400);
+    }
+
+    // Mise à jour des champs (seulement nom, prénom, email)
+    $user->setFirstName($data['firstName']);
+    $user->setLastName($data['lastName']);
+    $user->setEmail($email);
+
+    $em->flush();
+
+    return $this->json(['message' => 'Utilisateur mis à jour', 'user' => [
+        'id' => $user->getId(),
+        'firstName' => $user->getFirstName(),
+        'lastName' => $user->getLastName(),
+        'email' => $user->getEmail(),
+        'roles' => $user->getRoles(),
+    ]]);
+}
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
 }
 
 
