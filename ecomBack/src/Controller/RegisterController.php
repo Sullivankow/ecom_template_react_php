@@ -36,7 +36,7 @@ class RegisterController extends AbstractController
         ),
         responses: [
             new OA\Response(response: 201, description: "Utilisateur créé"),
-            new OA\Response(response: 400, description: "Erreur de validation"),
+            new OA\Response(response: 400, description: "Erreur lors de la validation"),
         ]
     )]
 
@@ -50,9 +50,9 @@ class RegisterController extends AbstractController
     ): JsonResponse {
         $data = json_decode($request->getContent(), true);
         $email = filter_var($data['email'], FILTER_SANITIZE_EMAIL);
-if (!filter_var($email, FILTER_VALIDATE_EMAIL)) {
-    return $this->json(['error' => 'Email invalide'], 400);
-}
+        if (!filter_var($email, FILTER_VALIDATE_EMAIL)) {
+            return $this->json(['error' => 'Cet email est invalide'], 400);
+        }
         $error = null;
 
         // Vérification des champs obligatoires
@@ -72,9 +72,9 @@ if (!filter_var($email, FILTER_VALIDATE_EMAIL)) {
         }
 
         // Vérification email déjà existant et échapper les caractères (si pas d'erreur précédente)
-       if (!$error && $em->getRepository(User::class)->findOneBy(['email' => $email])) {
-    $error = 'Cet email existe déjà';
-}
+        if (!$error && $em->getRepository(User::class)->findOneBy(['email' => $email])) {
+            $error = 'Email déjà existant';
+        }
 
         if ($error) {
             return $this->json(['error' => $error], 400);
@@ -98,106 +98,161 @@ if (!filter_var($email, FILTER_VALIDATE_EMAIL)) {
 
 
 
-// Route pour remplacer toutes les infos de l'utilisateur (PUT)
-#[Route('/users/{id}', name: 'user_update', methods: ['PUT'])]
-#[IsGranted('IS_AUTHENTICATED_FULLY')]
-#[OA\Put(
-    path: "/api/users/{id}",
-    summary: "Modifier totalement un utilisateur (nom, prénom, email)",
-    tags: ["Utilisateur"],
-    parameters: [
-        new OA\Parameter(name: "id", in: "path", required: true, schema: new OA\Schema(type: "integer"))
-    ],
-    requestBody: new OA\RequestBody(
-        required: true,
-        content: new OA\JsonContent(
-            required: ["firstName", "lastName", "email"],
-            properties: [
-                new OA\Property(property: "firstName", type: "string"),
-                new OA\Property(property: "lastName", type: "string"),
-                new OA\Property(property: "email", type: "string", format: "email")
+    // Route pour remplacer toutes les infos de l'utilisateur (PUT)
+    #[Route('/users/{id}', name: 'user_update', methods: ['PUT'])]
+    #[IsGranted('IS_AUTHENTICATED_FULLY')]
+    #[OA\Put(
+        path: "/api/users/{id}",
+        summary: "Modifier totalement un utilisateur (nom, prénom, email)",
+        tags: ["Utilisateur"],
+        parameters: [
+            new OA\Parameter(name: "id", in: "path", required: true, schema: new OA\Schema(type: "integer"))
+        ],
+        requestBody: new OA\RequestBody(
+            required: true,
+            content: new OA\JsonContent(
+                required: ["firstName", "lastName", "email"],
+                properties: [
+                    new OA\Property(property: "firstName", type: "string"),
+                    new OA\Property(property: "lastName", type: "string"),
+                    new OA\Property(property: "email", type: "string", format: "email")
+                ]
+            )
+        ),
+        responses: [
+            new OA\Response(response: 200, description: "Utilisateur mis à jour"),
+            new OA\Response(response: 400, description: "Erreur de validation")
+        ]
+    )]
+
+    public function updateUser(
+        Request $request,
+        User $user,
+        EntityManagerInterface $em,
+
+    ): JsonResponse {
+        $data = json_decode($request->getContent(), true);
+        $error = null;
+
+        // Vérification des champs obligatoires
+        if (
+            empty($data['firstName']) ||
+            empty($data['lastName']) ||
+            empty($data['email'])
+        ) {
+            $error = 'Champs manquants';
+        }
+
+        // Vérification email
+        $email = filter_var($data['email'] ?? '', FILTER_SANITIZE_EMAIL);
+        if (!$error && !filter_var($email, FILTER_VALIDATE_EMAIL)) {
+            $error = 'Email invalide';
+        }
+
+        // Vérification email déjà existant (hors utilisateur courant)
+        $existingUser = $em->getRepository(User::class)->findOneBy(['email' => $email]);
+        if (!$error && $existingUser && $existingUser->getId() !== $user->getId()) {
+            $error = 'Cet email existe déjà';
+        }
+
+        if ($error) {
+            return $this->json(['error' => $error], 400);
+        }
+
+        // Mise à jour des champs (seulement nom, prénom, email)
+        $user->setFirstName($data['firstName']);
+        $user->setLastName($data['lastName']);
+        $user->setEmail($email);
+
+        $em->flush();
+
+        return $this->json([
+            'message' => 'Utilisateur mis à jour',
+            'user' => [
+                'id' => $user->getId(),
+                'firstName' => $user->getFirstName(),
+                'lastName' => $user->getLastName(),
+                'email' => $user->getEmail(),
+                'roles' => $user->getRoles(),
             ]
-        )
-    ),
-    responses: [
-        new OA\Response(response: 200, description: "Utilisateur mis à jour"),
-        new OA\Response(response: 400, description: "Erreur de validation")
-    ]
-)]
-
-public function updateUser(
-    Request $request,
-    User $user,
-    EntityManagerInterface $em,
-    
-): JsonResponse {
-    $data = json_decode($request->getContent(), true);
-    $error = null;
-
-    // Vérification des champs obligatoires
-    if (
-        empty($data['firstName']) ||
-        empty($data['lastName']) ||
-        empty($data['email'])
-    ) {
-        $error = 'Champs manquants';
+        ]);
     }
 
-    // Vérification email
-    $email = filter_var($data['email'] ?? '', FILTER_SANITIZE_EMAIL);
-    if (!$error && !filter_var($email, FILTER_VALIDATE_EMAIL)) {
-        $error = 'Email invalide';
+
+
+
+    //Méthode pour modifier partiellement un utilisateur PAtCH
+    #[Route('/users/{id}', name: 'user_patch', methods: ['PATCH'])]
+    #[IsGranted('IS_AUTHENTICATED_FULLY')]
+    #[OA\Patch(
+        path: "/api/users/{id}",
+        summary: "Modifier partiellement un utilisateur (nom, prénom, email)",
+        tags: ["Utilisateur"],
+        parameters: [
+            new OA\Parameter(name: "id", in: "path", required: true, schema: new OA\Schema(type: "integer"))
+        ],
+        requestBody: new OA\RequestBody(
+            required: false,
+            content: new OA\JsonContent(
+                properties: [
+                    new OA\Property(property: "firstName", type: "string"),
+                    new OA\Property(property: "lastName", type: "string"),
+                    new OA\Property(property: "email", type: "string", format: "email")
+                ]
+            )
+        ),
+        responses: [
+            new OA\Response(response: 200, description: "Utilisateur modifié"),
+            new OA\Response(response: 400, description: "Erreur de validation")
+        ]
+    )]
+
+
+    public function patchUser(
+        Request $request,
+        User $user,
+        EntityManagerInterface $em
+    ): JsonResponse {
+        $data = json_decode($request->getContent(), true);
+        $error = null;
+
+        if (isset($data['email'])) {
+            $email = filter_var($data['email'], FILTER_SANITIZE_EMAIL);
+            if (!filter_var($email, FILTER_VALIDATE_EMAIL)) {
+                $error = 'Email invalide';
+            }
+            $existingUser = $em->getRepository(User::class)->findOneBy(['email' => $email]);
+            if (!$error && $existingUser && $existingUser->getId() !== $user->getId()) {
+                $error = 'Cet email existe déjà';
+            }
+            if (!$error) {
+                $user->setEmail($email);
+            }
+        }
+        if (isset($data['firstName'])) {
+            $user->setFirstName($data['firstName']);
+        }
+        if (isset($data['lastName'])) {
+            $user->setLastName($data['lastName']);
+        }
+
+        if ($error) {
+            return $this->json(['error' => $error], 400);
+        }
+
+        $em->flush();
+
+        return $this->json([
+            'message' => 'Utilisateur modifié',
+            'user' => [
+                'id' => $user->getId(),
+                'firstName' => $user->getFirstName(),
+                'lastName' => $user->getLastName(),
+                'email' => $user->getEmail(),
+                'roles' => $user->getRoles(),
+            ]
+        ]);
     }
-
-    // Vérification email déjà existant (hors utilisateur courant)
-    $existingUser = $em->getRepository(User::class)->findOneBy(['email' => $email]);
-    if (!$error && $existingUser && $existingUser->getId() !== $user->getId()) {
-        $error = 'Cet email existe déjà';
-    }
-
-    if ($error) {
-        return $this->json(['error' => $error], 400);
-    }
-
-    // Mise à jour des champs (seulement nom, prénom, email)
-    $user->setFirstName($data['firstName']);
-    $user->setLastName($data['lastName']);
-    $user->setEmail($email);
-
-    $em->flush();
-
-    return $this->json(['message' => 'Utilisateur mis à jour', 'user' => [
-        'id' => $user->getId(),
-        'firstName' => $user->getFirstName(),
-        'lastName' => $user->getLastName(),
-        'email' => $user->getEmail(),
-        'roles' => $user->getRoles(),
-    ]]);
-}
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
 
 
 
@@ -207,9 +262,3 @@ public function updateUser(
 
 
 }
-
-
-
-
-
-
