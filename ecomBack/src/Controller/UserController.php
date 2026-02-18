@@ -354,6 +354,35 @@ public function deleteUser(
 
 
 
+// Route pour récupérer et afficher les informations de l'utilisateur connecté
+#[Route('account/me', name: 'account_me', methods: ['GET'])]
+#[IsGranted('IS_AUTHENTICATED_FULLY')]
+#[OA\Get(
+    path: "/api/account/me",
+    summary: "Récupère les informations de l'utilisateur connecté",
+    tags: ["Account Me"],
+    responses: [
+        new OA\Response(response: 200, description: "Informations de l'utilisateur"),
+        new OA\Response(response: 401, description: "Non authentifié")
+    ]
+)]
+
+public function getMe(): JsonResponse {
+        $user = $this->getUser();
+       if (!$user || !$user instanceof User) {
+    return new JsonResponse(['error' => 'Non authentifié'], 401);
+}
+        return new JsonResponse([
+            'id' => $user->getId(),
+            'firstName' => $user->getFirstName(),
+            'lastName' => $user->getLastName(),
+            'email' => $user->getEmail(),
+            'roles' => $user->getRoles(),
+            
+        ]);
+}
+
+
 
 
 
