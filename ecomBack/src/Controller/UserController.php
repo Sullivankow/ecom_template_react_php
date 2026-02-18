@@ -2,7 +2,7 @@
 
 namespace App\Controller;
 
-
+use App\Repository\UserRepository;
 use App\Entity\User;
 use Doctrine\ORM\EntityManagerInterface;
 use Symfony\Component\Security\Http\Attribute\IsGranted;
@@ -43,6 +43,46 @@ public function listUsers(EntityManagerInterface $em): JsonResponse
     return $this->json($data);
 }
 
+
+//Méthode pour afficher un utilisateur par son id
+#[Route('/users/{id}', name: 'user_show', methods: ['GET'])]
+#[IsGranted('IS_AUTHENTICATED_FULLY')]
+#[OA\Get(
+    path: "/api/users/{id}",
+    summary: "Récupère un utilisateur par son ID",
+    tags: ["Utilisateur"],
+    parameters: [
+        new OA\Parameter(
+            name: "id",
+            in: "path",
+            description: "ID de l'utilisateur",
+            required: true,
+            schema: new OA\Schema(type: "integer")
+        )
+    ],
+    responses: [
+        new OA\Response(response: 200, description: "Utilisateur trouvé"),
+        new OA\Response(response: 404, description: "Utilisateur non trouvé")
+    ]
+)]
+public function getUserById($id, UserRepository $userRepository):
+JsonResponse {
+        $user = $userRepository->find($id);
+        if(!$user) {
+            return new JsonResponse(['error' => 'Utilisateur non trouvé'], 404);
+        }
+
+        return new JsonResponse([
+            'id' => $user->getId(),
+            'firstName' => $user->getFirstName(),
+            'lastName' => $user->getLastName(),
+            'email' => $user->getEmail(),
+            'roles' => $user->getRoles()
+
+        ]);
+
+
+}
 
 
 
