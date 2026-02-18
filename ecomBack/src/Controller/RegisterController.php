@@ -257,6 +257,33 @@ class RegisterController extends AbstractController
 
 
 
+#[Route('users/{id}', name: 'user_delete', methods: ['DELETE'])]
+#[IsGranted('IS_AUTHENTICATED_FULLY')]
+#[OA\Delete(
+    path: "/api/users/{id}",
+    summary: "Supprimer un utilisateur",
+    tags: ["Utilisateur"],
+    parameters: [
+        new OA\Parameter(name: "id", in: "path", required: true, schema: new OA\Schema(type: "integer"))
+    ],
+    responses: [
+        new OA\Response(response: 200, description: "Utilisateur supprimé"),
+        new OA\Response(response: 404, description: "Utilisateur non trouvé")
+    ]
+)]
+public function deleteUser(
+    User $user,
+    EntityManagerInterface $em
+): JsonResponse {
+    $em->remove($user);
+    $em->flush();
+
+    return $this->json(['message' => 'Utilisateur supprimé']);
+}
+
+
+
+
 
 
 
