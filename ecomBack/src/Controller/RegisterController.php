@@ -14,39 +14,9 @@ use Symfony\Bundle\FrameworkBundle\Controller\AbstractController;
 use OpenApi\Attributes as OA;
 
 
-class UserController extends AbstractController
+class RegisterController extends AbstractController
 {
-//Route pour afficher la liste de tous les utilisateurs
-#[Route('/users', name: 'user_list', methods: ['GET'])]
-#[IsGranted('IS_AUTHENTICATED_FULLY')]
-#[OA\Get(
-    path: "/api/users",
-    summary: "Récupère la liste de tous les utilisateurs",
-    tags: ["Utilisateur"],
-    responses: [
-        new OA\Response(response: 200, description: "Liste des utilisateurs")
-    ]
-)]
-public function listUsers(EntityManagerInterface $em): JsonResponse
-{
-    $users = $em->getRepository(User::class)->findAll();
-    $data = [];
-    foreach ($users as $user) {
-        $data[] = [
-            'id' => $user->getId(),
-            'firstName' => $user->getFirstName(),
-            'lastName' => $user->getLastName(),
-            'email' => $user->getEmail(),
-            'roles' => $user->getRoles(),
-        ];
-    }
-    return $this->json($data);
-}
-
-
-
-
-// Route pour l'inscription d'un nouvel utilisateur
+    // Route pour l'inscription d'un nouvel utilisateur
     #[Route('/register', name: 'api_register', methods: ['POST'])]
     #[OA\Post(
         path: "/api/register",
